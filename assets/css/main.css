@@ -72,6 +72,10 @@ input, select, textarea {
 	appearance: none;
 }
 
+.scc--logo {
+	width: 60%;
+}
+
 /* Basic */
 
 	@-ms-viewport {
