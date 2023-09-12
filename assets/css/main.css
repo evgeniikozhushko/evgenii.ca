@@ -3302,7 +3302,7 @@ input, select, textarea {
 		}
 
 			#wrapper > section > header:before {
-				background: #ffffff; /* This will change the color of the vertical line, previous color #43d9b8*/
+				background: rgba(0, 0, 0, 0.25); /* This will change the color of the vertical line, previous color #43d9b8*/
 				content: '';
 				display: block;
 				margin-top: 1rem;
@@ -3315,7 +3315,7 @@ input, select, textarea {
 			}
 
 				#wrapper > section > header h1:before, #wrapper > section > header h2:before {
-					background: #ffffff; /* This will change the color of the horizontal little line, previous color #43d9b8*/
+					background: rgba(0, 0, 0, 0.25); /* This will change the color of the horizontal little line, previous color #43d9b8*/
 					content: '';
 					display: block;
 					height: 2px;
@@ -3324,7 +3324,7 @@ input, select, textarea {
 				}
 
 				#wrapper > section > header h1:after, #wrapper > section > header h2:after {
-					background: #ffffff; /* This will change the color of the little round dot on the horizontal line, previous color #43d9b43d9b8*/
+					background: rgba(0, 0, 0, 0.25); /* This will change the color of the little round dot on the horizontal line, previous color #43d9b43d9b8*/
 					border-radius: 0.5rem;
 					content: '';
 					display: block;
@@ -3381,7 +3381,7 @@ input, select, textarea {
 			}
 
 			#wrapper > section:last-of-type > header:after {
-				background: #ffffff; /* This will chance the color of the little dot at the bottom of the vertical line.*/
+				background: rgba(0, 0, 0, 0.25); /* This will chance the color of the little dot at the bottom of the vertical line.*/
 				border-radius: 0.5rem;
 				bottom: -1.5rem;
 				content: '';
