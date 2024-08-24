@@ -13,7 +13,9 @@
         console.log('Full Blog Data Response:', blogData); // Log full response
         if (blogData) {
           console.log('Fetched Blog Data:', blogData.items); // Log full structure
-          setBlogPosts(blogData.items); // Assuming 'items' contains the blog posts
+          const filteredPosts = blogData.items.filter((post: any) => post.fields.title !== "Intro");
+          console.log('Filtered Blog Data:', filteredPosts); // Log the filtered posts
+          setBlogPosts(filteredPosts); // Set the filtered posts
         }
       };
 

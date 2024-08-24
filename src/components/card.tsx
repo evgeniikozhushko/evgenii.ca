@@ -19,12 +19,11 @@ export default function Card({ title, imageUrl }: CardProps) {
   const imageUrlToUse = imageUrl ? `https:${imageUrl}` : placeholderImage;
 
   return (
-    <NextUICard isFooterBlurred radius="lg" className="border-none mx-10 mb-6">
+    <NextUICard isFooterBlurred radius="lg" className="flex w-[10] border-none mx-10 mb-6">
       <Image
         alt={title}
-        className="object-cover"
+        className="object-cover w-screen"
         height={400}
-        width={1000}
         src={imageUrlToUse} // Use fallback or Contentful image
       />
       <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
