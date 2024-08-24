@@ -23,9 +23,9 @@ export default function Card({ title, imageUrl }: CardProps) {
       <Image
         alt={title}
         className="object-cover"
-        height={200}
+        height={400}
+        width={1000}
         src={imageUrlToUse} // Use fallback or Contentful image
-        width={200}
       />
       <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
         <p className="text-tiny text-white/80">{title}</p>

@@ -1,14 +1,67 @@
-import { title } from "@/components/primitives";
+import { useState, useEffect } from "react";
 import DefaultLayout from "@/layouts/default";
+import { getAllPosts } from "@/contentful/core";
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'; // If you're rendering Rich Text
+
 
 export default function IntroPage() {
+  const [introPost, setIntroPost] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchIntroPost = async () => {
+      const blogData = await getAllPosts();
+      if (blogData?.items?.length) {
+        // Assuming the first post is the one for the Intro page
+        setIntroPost(blogData.items[0]); 
+      } else {
+        console.error("No posts available");
+      }
+    };
+
+    fetchIntroPost(); // Call the async function
+  }, []);
+
+  if (!introPost) return <p>Loading...</p>;
+
+  // Extract content from the intro post
+  const { title, coverImage, content } = introPost.fields;
+
   return (
     <DefaultLayout>
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <div className="inline-block max-w-lg text-center justify-center">
-          <h1 className={title()}>Introduction</h1>
+      {/* Hero Section */}
+      <div className="flex flex-col lg:flex-row items-start p-8 gap-8">
+        {/* Text Section */}
+        <div className="flex-1">
+          <h1 className="text-4xl md:text-4xl lg:text-4xl font-extrabold leading-tight">
+            {title || "title"}
+          </h1>
+
+          {/* Description Section */}
+          <div className="text-sm md:text-sm lg:text-base font-extralight mt-4 pr-20">
+            {content ? (
+              typeof content === 'string' ? (
+                <p>{content}</p> // Render plain text content
+              ) : (
+                documentToReactComponents(content) // Render rich text content
+              )
+            ) : (
+              <p>No content available</p>
+            )}
+          </div>
         </div>
-      </section>
+
+        {/* Image Section */}
+        {coverImage?.fields?.file?.url && (
+          <div className="flex-1">
+            <img 
+              src={`https:${coverImage.fields.file.url}`}
+              alt={title || "Hero Image"}
+              className="w-full h-auto rounded-xl hover:scale-105 transition-transform duration-700 ease-in-out"
+            />
+          </div>
+        )}
+      </div>
     </DefaultLayout>
   );
 }
+//             />

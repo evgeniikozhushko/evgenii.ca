@@ -38,4 +38,23 @@ const fetchLogo = async () => {
   }
 };
 
-export { contentfulClient, getAllPosts, fetchLogo };
+  
+// // Fetch Intro Image by asset ID
+// const fetchIntroImage = async () => {
+//   try {
+//     const asset = await contentfulClient.getAsset('62PiAERiHiE9luyQW07dY5');
+//     console.log('Fetched Intro image asset:', asset); // Debugging output
+//     // Replace with your actual asset ID
+//     if (asset.fields.file) {
+//       return `https:${asset.fields.file.url}`;
+//     } else {
+//       console.error('Error fetching logo from Contentful: Asset file is undefined');
+//       return null;
+//     }
+//   } catch (error) {
+//     console.error('Error fetching logo from Contentful:', error);
+//     return null;
+//   }
+// };
+
+export { contentfulClient, getAllPosts, fetchLogo, };

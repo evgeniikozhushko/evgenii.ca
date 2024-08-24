@@ -27,7 +27,7 @@
         {/* Hero Section */}
         <div className="flex flex-col items-start p-8">
           {/* Hero Heading */}
-          <h1 className="text-4xl md:text-4xl lg:text-6xl font-extrabold leading-tight">
+          <h1 className="text-4xl md:text-4xl lg:text-4xl font-extrabold leading-tight">
             evgenii.ca
           </h1>
           <p className="text-lg md:text-xl lg:text-2xl font-extralight mt-4">
@@ -35,7 +35,7 @@
           </p>
 
           {/* Large Format Image */}
-          <div className="mt-8 w-full">
+          {/* <div className="mt-8 w-full">
             <Link to="/intro">
               <img 
                 src={blogPosts[0].fields.coverImage?.fields?.file?.url}
@@ -43,7 +43,7 @@
                 className="w-full h-auto rounded-xl hover:scale-105 transition-transform duration-700 ease-in-out"
               />
             </Link>
-          </div>
+          </div> */}
         </div>
 
         {/* Blog Posts Section */}
