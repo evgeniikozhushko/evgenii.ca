@@ -29,10 +29,10 @@
         {/* Hero Section */}
         <div className="flex flex-col items-start p-8">
           {/* Hero Heading */}
-          <h1 className="text-4xl md:text-4xl lg:text-4xl font-extrabold leading-tight">
+          <h1 className="text-4xl md:text-4xl lg:text-4xl font-extrabold leading-tight hover:skew-x-6 hover:scale-110 transition-transform duration-700 ease-in-out">
             evgenii.ca
           </h1>
-          <p className="text-lg md:text-xl lg:text-2xl font-extralight mt-4">
+          <p className="text-lg md:text-xl lg:text-2xl font-extralight mt-4 hover:skew-x-3 hover:scale-105 transition-transform duration-700 ease-in-out">
             design & web development
           </p>
 
@@ -49,7 +49,7 @@
         </div>
 
         {/* Blog Posts Section */}
-        <div className="flex place-content-center flex-wrap gap-6 mt-12 px-8">
+        <div className="w-full h-auto rounded-xl">
           {blogPosts.map((post: any) => {
             const imageUrl = post.fields.coverImage?.fields?.file?.url;
             const title = post.fields.title;

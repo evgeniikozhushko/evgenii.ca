@@ -7,10 +7,11 @@ interface CardProps {
   title: any;
   imageUrl: any;
   fixedImageUrl: any;
+  className?: string; // Accept custom class name prop
 }
 
 
-export default function Card({ title, imageUrl }: CardProps) {
+export default function Card({ title, imageUrl, className }: CardProps) {
   // Log the image URL for debugging
   console.log("Image URL:", imageUrl);
 
@@ -19,7 +20,7 @@ export default function Card({ title, imageUrl }: CardProps) {
   const imageUrlToUse = imageUrl ? `https:${imageUrl}` : placeholderImage;
 
   return (
-    <NextUICard isFooterBlurred radius="lg" className="flex w-[10] border-none mx-10 mb-6">
+    <NextUICard isFooterBlurred radius="lg" className="flex w-[10] border-none mx-10 mb-10 hover:scale-105 hover:skew-y-1 transition-transform duration-75 ease-in-out">
       <Image
         alt={title}
         className="object-cover w-screen"
