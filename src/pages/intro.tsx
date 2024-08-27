@@ -11,8 +11,13 @@ export default function IntroPage() {
     const fetchIntroPost = async () => {
       const blogData = await getAllPosts();
       if (blogData?.items?.length) {
-        // Assuming the first post is the one for the Intro page
-        setIntroPost(blogData.items[0]); 
+        // Filter for the post with the title "Intro"
+        const intro = blogData.items.find((post: any) => post.fields.title === "Intro");
+        if (intro) {
+          setIntroPost(intro);
+        } else {
+          console.error("Intro post not found");
+        }
       } else {
         console.error("No posts available");
       }
