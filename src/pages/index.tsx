@@ -49,7 +49,7 @@
         </div>
 
         {/* Blog Posts Section */}
-        <div className="w-full h-auto rounded-xl">
+        <div className="flex flex-wrap w-full h-auto rounded-xl my-8">
           {blogPosts.map((post: any) => {
             const imageUrl = post.fields.coverImage?.fields?.file?.url;
             const title = post.fields.title;
