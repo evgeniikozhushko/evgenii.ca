@@ -3,7 +3,7 @@ import { getAllPosts } from "@/contentful/core";
 import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
-import { Accordion, AccordionItem } from "@nextui-org/accordion";
+import Accordion from "@/components/accordion";
 import { Image } from "@nextui-org/react";
 
 export default function IndexPage() {
@@ -54,8 +54,8 @@ export default function IndexPage() {
           </div> */}
       </div>
 
-      {/* Blog Posts Section */}
-      <div className="flex flex-wrap w-full h-auto rounded-xl my-8">
+      {/* Card Section */}
+      {/* <div className="flex flex-wrap w-full h-auto rounded-xl my-8">
         {blogPosts.map((post: any) => {
           const imageUrl = post.fields.coverImage?.fields?.file?.url;
           const title = post.fields.title;
@@ -69,35 +69,16 @@ export default function IndexPage() {
             />
           );
         })}
-      </div>
+      </div> */}
 
       {/* Accordion and Image Section - Side by Side */}
       <div className="flex items-start p-8 space-x-8">
-        <div className="w-1/2 p-8"> {/* Removed mx-auto */}
-          <Accordion>
-            <AccordionItem key="1" aria-label="Accordion 1" subtitle="Press to expand" title="Accordion 1">
-              {defaultContent}
-            </AccordionItem>
-            <AccordionItem
-              key="2"
-              aria-label="Accordion 2"
-              subtitle={
-                <span>
-                  Press to expand <strong>key 2</strong>
-                </span>
-              }
-              title="Accordion 2"
-            >
-              {defaultContent}
-            </AccordionItem>
-            <AccordionItem key="3" aria-label="Accordion 3" subtitle="Press to expand" title="Accordion 3">
-              {defaultContent}
-            </AccordionItem>
-          </Accordion>
+        <div className="w-1/2"> {/* Removed mx-auto */}
+          <Accordion />
         </div>
-        <Image
+          <Image
             isZoomed
-            width={240}
+            // width={1000}
             alt="NextUI Fruit Image with Zoom"
             src="https://nextui-docs-v2.vercel.app/images/fruit-1.jpeg"
           />
