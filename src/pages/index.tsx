@@ -76,12 +76,14 @@ export default function IndexPage() {
         <div className="w-1/2"> {/* Removed mx-auto */}
           <Accordion />
         </div>
+        <div className="flex justify-end">
           <Image
             isZoomed
-            // width={1000}
+            width={600}
             alt="NextUI Fruit Image with Zoom"
             src="https://nextui-docs-v2.vercel.app/images/fruit-1.jpeg"
           />
+        </div>
       </div>
     </DefaultLayout>
   );
