@@ -3,8 +3,9 @@ import { getAllPosts } from "@/contentful/core";
 import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
-import Accordion from "@/components/accordion";
+// import Accordion from "@/components/accordion"; // Abstracted Accordion component
 import { Image } from "@nextui-org/react";
+import { Accordion, AccordionItem } from "@nextui-org/react";
 
 export default function IndexPage() {
 
@@ -73,13 +74,30 @@ export default function IndexPage() {
 
       {/* Accordion and Image Section - Side by Side */}
       <div className="flex items-start p-8 space-x-8">
-        <div className="w-1/2"> {/* Removed mx-auto */}
-          <Accordion />
-        </div>
+        <Accordion>
+          <AccordionItem key="1" aria-label="Accordion 1" subtitle="Press to expand" title="Accordion 1">
+            {defaultContent}
+          </AccordionItem>
+          <AccordionItem
+            key="2"
+            aria-label="Accordion 2"
+            subtitle={
+              <span>
+                Press to expand <strong>key 2</strong>
+              </span>
+            }
+            title="Accordion 2"
+          >
+            {defaultContent}
+          </AccordionItem>
+          <AccordionItem key="3" aria-label="Accordion 3" subtitle="Press to expand" title="Accordion 3">
+            {defaultContent}
+          </AccordionItem>
+        </Accordion>
         <div className="flex justify-end">
           <Image
             isZoomed
-            width={600}
+            width={"100%"}
             alt="NextUI Fruit Image with Zoom"
             src="https://nextui-docs-v2.vercel.app/images/fruit-1.jpeg"
           />
