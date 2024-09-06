@@ -19,7 +19,7 @@ export default function AccordionComponent() {
   if (!posts.length) return <p>Loading...</p>;
 
   return (
-    <Accordion defaultExpandedKeys={["0"]}>
+    <Accordion>
       {posts.map((post: any, index: number) => (
         <AccordionItem
           key={post.sys.id} // Dynamic key based on Contentful post ID
