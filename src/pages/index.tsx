@@ -13,6 +13,7 @@ export default function IndexPage() {
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 
   const [blogPosts, setBlogPosts] = useState<any>([]);
+  const [displayImage, setDisplayImage] = useState<string>("//images.ctfassets.net/vrssbejn74f5/1TddS8rtGvdvzXmvIzSnZU/4c436f876730492e22d6923d2d803ead/2023_BVCAS_blog.jpg");
 
   useEffect(() => {
     const getBlogData = async () => {
@@ -76,33 +77,34 @@ export default function IndexPage() {
       <div className="flex items-start p-8 space-x-8">
         <div className="w-1/2">
         <Accordion>
-      <AccordionItem key="1" aria-label="Accordion 1" subtitle="Press to expand" title="Accordion 1">
-        {defaultContent}
-      </AccordionItem>
-      <AccordionItem
-        key="2"
-        aria-label="Accordion 2"
-        subtitle={
-          <span>
-            Press to expand <strong>key 2</strong>
-          </span>
-        }
-        title="Accordion 2"
-      >
-        {defaultContent}
-      </AccordionItem>
-      <AccordionItem key="3" aria-label="Accordion 3" subtitle="Press to expand" title="Accordion 3">
-        {defaultContent}
-      </AccordionItem>
-    </Accordion>
+          {blogPosts.map((post: any) => {
+            const imageUrl = post.fields.coverImage?.fields?.file?.url;
+            const title = post.fields.title;
+
+            return (
+                <AccordionItem
+                  key={post.sys.id}
+                  aria-label="Accordion 1"
+                  title={title} 
+                  onClick={() => setDisplayImage(imageUrl)}
+                  >
+                  {defaultContent}
+                </AccordionItem>
+              
+            );
+          })}
+          </Accordion>
         </div>
         <div className="flex w-1/2 justify-end">
-          <Image
-            isZoomed
-            width={"100%"}
-            alt="NextUI Fruit Image with Zoom"
-            src="https://nextui-docs-v2.vercel.app/images/fruit-1.jpeg"
-          />
+          
+            {/* // const imageUrl = post.fields.coverImage?.fields?.file?.url; */}
+              <Image
+                // key={post.sys.id}
+                isZoomed
+                width={"100%"}
+                alt="Project Image"
+                src={displayImage}
+              />
         </div>
       </div>
     </DefaultLayout>
