@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@contentful/rich-text-html-renderer": "^16.6.8",
-    "@contentful/rich-text-react-renderer": "^15.22.9",
+    "@contentful/rich-text-react-renderer": "^15.22.11",
     "@nextui-org/button": "2.0.37",
     "@nextui-org/card": "^2.0.33",
     "@nextui-org/code": "2.0.32",

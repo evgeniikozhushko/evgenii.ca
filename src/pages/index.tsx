@@ -1,3 +1,4 @@
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'; // Import rich text renderer
 import Card from "@/components/card";
 import { getAllPosts } from "@/contentful/core";
 import DefaultLayout from "@/layouts/default";
@@ -23,12 +24,36 @@ export default function IndexPage() {
         console.log('Fetched Blog Data:', blogData.items); // Log full structure
         const filteredPosts = blogData.items.filter((post: any) => post.fields.title !== "Intro");
         console.log('Filtered Blog Data:', filteredPosts); // Log the filtered posts
+
+        // Log each post's content field to check if it's available
+      filteredPosts.forEach((post: any) => {
+        console.log(`Post Title: ${post.fields.title}`);
+        console.log(`Post Content: `, post.fields.content); // Log content field
+      });
+
         setBlogPosts(filteredPosts); // Set the filtered posts
       }
     };
 
     getBlogData(); // Call the async function   
   }, []);
+
+  // 
+  const renderPostContent = (content: any) => {
+    if (content && Array.isArray(content)) {
+      return content.map((node: any, index: number) => {
+        if (node.nodeType === 'document') {
+          return <div key={index}>{documentToReactComponents(node)}</div>; // Use documentToReactComponents for rendering
+        } else if (node.nodeType === 'paragraph' && node.content) {
+          return <p key={index}>{node.content[0]?.value || ''}</p>; // Handle paragraphs
+        } else if (node.nodeType === 'heading-1' && node.content) {
+          return <h1 key={index}>{node.content[0]?.value || ''}</h1>; // Handle heading-1
+        }
+        return null;
+      });
+    }
+    return defaultContent; // Fallback content if content is not available
+  };
 
   if (!blogPosts.length) return <p>Loading...</p>;
 
@@ -80,6 +105,7 @@ export default function IndexPage() {
           {blogPosts.map((post: any) => {
             const imageUrl = post.fields.coverImage?.fields?.file?.url;
             const title = post.fields.title;
+            const postContent = post.fields.content;
 
             return (
                 <AccordionItem
@@ -88,7 +114,8 @@ export default function IndexPage() {
                   title={title} 
                   onClick={() => setDisplayImage(imageUrl)}
                   >
-                  {defaultContent}
+                  {postContent ? renderPostContent(postContent) : defaultContent}
+                  {/* {postContent ? postContent : defaultContent} */}
                 </AccordionItem>
               
             );
