@@ -14,10 +14,11 @@ import {
 } from "@nextui-org/navbar";
 import { link as linkStyles } from "@nextui-org/theme";
 import clsx from "clsx";
-import { fetchLogo } from "@/contentful/core";
+import { fetchLightLogo, fetchDarkLogo } from "@/contentful/core"; // Import logo fetchers
 // import { fetchLogo } from "@/contentful/core";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
+import { useTheme } from "@/hooks/use-theme"; // Import useTheme hook
 import {
   TwitterIcon,
   GithubIcon,
@@ -28,19 +29,27 @@ import {
 // import { Logo } from "@/components/icons";
 
 export const Navbar = () => {
+  const { theme } = useTheme(); // Track current theme (dark or light)
+  // const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true); // For initial loading state
 
+    // Preload both logos on mount
+    // Fetch the appropriate logo when the theme changes
   useEffect(() => {
-    const getLogo = async () => {
-      const logo = await fetchLogo();
+    const setLogoBasedOnTheme = async () => {
+      setLoading(true); // Show loading state
+      const logo = theme === "dark" ? await fetchDarkLogo() : await fetchLightLogo();
       setLogoUrl(logo);
+      setLoading(false); // Hide loading state once the logo is set
     };
-    getLogo();
-  }, []);
+
+    setLogoBasedOnTheme(); // Fetch the correct logo when the theme changes
+  }, [theme]); // Depend on the theme state
 
   const searchInput = (
     <Input
-      aria-label="Search"
+      aria-label="Search" 
       classNames={{
         inputWrapper: "bg-default-100",
         input: "text-sm",
@@ -68,7 +77,8 @@ export const Navbar = () => {
             color="foreground"
             href="/"
           >
-            {logoUrl && <img src={logoUrl} alt="Site Logo" width="50" height="50" />}
+            {!loading && logoUrl && <img src={logoUrl} alt="Site Logo" width="40" height="50" />}
+            {/* {logoUrl && <img src={logoUrl} alt="Site Logo" width="40" height="50" />} */}
             {/* <Logo /> */}
             {/* <p className="font-bold text-inherit">evgenii.ca</p> */}
           </Link>

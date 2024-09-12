@@ -42,9 +42,22 @@ export const useTheme = (defaultTheme?: Theme) => {
   const toggleTheme = () =>
     theme === ThemeProps.dark ? setLightTheme() : setDarkTheme();
 
+  // Apply the theme class on mount synchronously
   useEffect(() => {
-    _setTheme(theme);
-  });
+    const storedTheme = localStorage.getItem(ThemeProps.key) as Theme | null;
+    const appliedTheme = storedTheme || defaultTheme || ThemeProps.light;
+    _setTheme(appliedTheme); // Ensure theme class is applied immediately
+  }, []); // Only run once on mount
 
   return { theme, isDark, isLight, setLightTheme, setDarkTheme, toggleTheme };
 };
+
+//   useEffect(() => {
+//     const storedTheme = localStorage.getItem(ThemeProps.key) as Theme | null;
+//     if (storedTheme && storedTheme !== theme) {
+//       _setTheme(storedTheme);
+//     }
+//   }, []); // Only run once on mount to apply the stored theme
+
+//   return { theme, isDark, isLight, setLightTheme, setDarkTheme, toggleTheme };
+// };
