@@ -6,6 +6,9 @@ import App from "./App.tsx";
 import { Provider } from "./provider.tsx";
 import "@/styles/globals.css";
 
+const storedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.classList.add(storedTheme); // Apply the theme before React mounts
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
