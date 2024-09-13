@@ -77,7 +77,7 @@ export const Navbar = () => {
             color="foreground"
             href="/"
           >
-            {!loading && logoUrl && <img src={logoUrl} alt="Site Logo" width="40" height="50" />}
+            {!loading && logoUrl && <img src={logoUrl} alt="Site Logo" width="30" height="40" />}
             {/* {logoUrl && <img src={logoUrl} alt="Site Logo" width="40" height="50" />} */}
             {/* <Logo /> */}
             {/* <p className="font-bold text-inherit">evgenii.ca</p> */}
