@@ -30,7 +30,7 @@ export const useTheme = (defaultTheme?: Theme) => {
       ThemeProps.light,
       ThemeProps.dark,
     );
-    document.documentElement.classList.add(theme);
+    document.documentElement.classList.add(theme);  
     setTheme(theme);
   };
 
