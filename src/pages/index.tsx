@@ -1,4 +1,5 @@
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'; // Import rich text renderer
+import { MARKS, BLOCKS } from '@contentful/rich-text-types'; // Import rich text types
 import { getAllPosts } from "@/contentful/core";
 import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
@@ -28,10 +29,51 @@ export default function IndexPage() {
 
   // Function to render rich text content from Contentful
   const renderPostContent = (content: any) => {
-    if (content) {
-      return documentToReactComponents(content); // Render rich text from Contentful
+    if (content && content.nodeType === 'document') { // Ensure it's valid rich text
+      const contentfulOptions = {
+        renderMark: {
+          [MARKS.CODE]: (embedded: any) => (
+            <span className="code-block-wrapper">
+              <span className="relative-parent">
+                <span dangerouslySetInnerHTML={{ __html: embedded }} />
+              </span>
+            </span>
+          ),
+        },
+        renderNode: {
+          "embedded-asset-block": (node: any) => (
+            <img
+              className="responsive-img-class m-t20 m-b30" // Use a responsive image class
+              src={node.data.target.fields.file.url}
+              alt={node.data.target.fields.title || "Image"}
+            />
+          ),
+          [BLOCKS.QUOTE]: (node, children: any) => (
+            <div className="quote-wrapper p-4 m-lr30">
+              <blockquote className="custom-blockquote">
+                <span className="quote-text">{children}</span>
+              </blockquote>
+            </div>
+          ),
+          [BLOCKS.UL_LIST]: (node, children: any) => (
+            <ul className="custom-ul-list m-tb60 m-lr20">{children}</ul>
+          ),
+          [BLOCKS.OL_LIST]: (node, children: any) => (
+            <ol className="custom-ol-list m-tb40 m-lr20">{children}</ol>
+          ),
+          [BLOCKS.LIST_ITEM]: (node, children: any) => (
+            <li className="custom-list-item p-tb10">{children}</li>
+          ),
+        },
+        renderText: (text: any) => {
+          return text.split("\n").reduce((children: any, textSegment: any, index: any) => {
+            return [...children, index > 0 && <br key={index} />, textSegment];
+          }, []);
+        },
+      };
+      return documentToReactComponents(content, contentfulOptions); // Apply rich text rendering
     }
-    return <p>{defaultContent}</p>; // Fallback if no content is available
+    return <p>{defaultContent}</p>; // Fallback for no content
   };
 
   if (!blogPosts.length) return <p>Loading...</p>;
