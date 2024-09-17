@@ -1,7 +1,9 @@
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'; // Import rich text renderer
 import { MARKS, BLOCKS } from '@contentful/rich-text-types'; // Import rich text types
+
 import { getAllPosts } from "@/contentful/core";
 import DefaultLayout from "@/layouts/default";
+
 import { useEffect, useState } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
@@ -48,20 +50,20 @@ export default function IndexPage() {
               alt={node.data.target.fields.title || "Image"}
             />
           ),
-          [BLOCKS.QUOTE]: (node, children: any) => (
+          [BLOCKS.QUOTE]: (_node: any, children: any) => (
             <div className="quote-wrapper p-4 m-lr30">
               <blockquote className="custom-blockquote">
                 <span className="quote-text">{children}</span>
               </blockquote>
             </div>
           ),
-          [BLOCKS.UL_LIST]: (node, children: any) => (
+          [BLOCKS.UL_LIST]: (_node: any, children: any) => (
             <ul className="custom-ul-list m-tb60 m-lr20">{children}</ul>
           ),
-          [BLOCKS.OL_LIST]: (node, children: any) => (
+          [BLOCKS.OL_LIST]: (_node: any, children: any) => (
             <ol className="custom-ol-list m-tb40 m-lr20">{children}</ol>
           ),
-          [BLOCKS.LIST_ITEM]: (node, children: any) => (
+          [BLOCKS.LIST_ITEM]: (_node: any, children: any) => (
             <li className="custom-list-item p-tb10">{children}</li>
           ),
         },
@@ -98,7 +100,7 @@ export default function IndexPage() {
               const imageUrl = post.fields.coverImage?.fields?.file?.url || fallbackImage;
               const title = post.fields.title;
               const postContent = post.fields.content;
-
+              console.log('Contentful field returned:', post.fields);
               return (
                 <AccordionItem
                   key={post.sys.id}

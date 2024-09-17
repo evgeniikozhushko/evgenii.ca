@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Add to your global stylesheet or component-specific CSS module */
+
+.custom-ul-list {
+  list-style-type: disc; /* Bulleted list */
+  padding-left: 20px;    /* Indent for list */
+}
+
+.custom-ol-list {
+  list-style-type: decimal; /* Numbered list */
+  padding-left: 20px;       /* Indent for list */
+}
+
+.custom-list-item {
+  margin-bottom: 10px; /* Space between list items */
+}
+
+/* Additional styles for consistency */
+.quote-wrapper {
+  border-left: 4px solid #ccc;
+  padding-left: 16px;
+  color: #555;
+}
+
+.custom-blockquote {
+  font-style: italic;
+}
+
+.responsive-img-class {
+  max-width: 100%;
+  height: auto;
+}
+
+.code-block-wrapper {
+  background-color: #f5f5f5;
+  padding: 4px;
+  border-radius: 4px;
+  font-family: monospace;
+}
