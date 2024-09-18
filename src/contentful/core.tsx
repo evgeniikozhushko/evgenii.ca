@@ -1,6 +1,6 @@
 import { createClient } from "contentful";
 
-// Ryan's super code block - take data from contentful
+// Ryan's super code block - take data from Contentful
 
 // Initialize Contentful Client
 const contentfulClient = createClient({
@@ -9,7 +9,7 @@ const contentfulClient = createClient({
 
 });
 
-// Fetch all posts
+// Fetch all posts - The Magic Function
 const getAllPosts = async () => {
   try {
     return await contentfulClient.getEntries({ content_type: 'post' })

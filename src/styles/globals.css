@@ -2,7 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Add to your global stylesheet or component-specific CSS module */
+/* CSS rule to any element that wraps your rich text content (such as paragraphs). */
+
+.custom-rich-text {
+  white-space: pre-wrap;
+}
 
 .custom-ul-list {
   list-style-type: disc; /* Bulleted list */

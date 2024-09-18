@@ -66,14 +66,25 @@ export default function IndexPage() {
           [BLOCKS.LIST_ITEM]: (_node: any, children: any) => (
             <li className="custom-list-item p-tb10">{children}</li>
           ),
+          [BLOCKS.PARAGRAPH]: (_node: any, children: any) => (
+            <p className="custom-rich-text">{children}</p>
+          ),
         },
         renderText: (text: any) => {
-          return text.split("\n").reduce((children: any, textSegment: any, index: any) => {
-            return [...children, index > 0 && <br key={index} />, textSegment];
-          }, []);
+          return (
+            <span style={{ whiteSpace: 'pre-wrap' }}>
+              {text.split("\n").reduce((children: any, textSegment: any, index: any) => {
+                return [...children, index > 0 && <br key={index} />, textSegment];
+              }, [])}
+            </span>
+          );
         },
       };
-      return documentToReactComponents(content, contentfulOptions); // Apply rich text rendering
+      return (
+        <div className="contentful-rich-text">
+          {documentToReactComponents(content, contentfulOptions)}
+        </div>
+      );
     }
     return <p>{defaultContent}</p>; // Fallback for no content
   };
@@ -128,8 +139,8 @@ export default function IndexPage() {
 }
 
 
- {/* Large Format Image */}
-        {/* <div className="mt-8 w-full">
+{/* Large Format Image */ }
+{/* <div className="mt-8 w-full">
             <Link to="/intro">
               <img 
                 src={blogPosts[0].fields.coverImage?.fields?.file?.url}
@@ -138,9 +149,9 @@ export default function IndexPage() {
               />
             </Link>
           </div> */}
-          
-      {/* Card Section */}
-      {/* <div className="flex flex-wrap w-full h-auto rounded-xl my-8">
+
+{/* Card Section */ }
+{/* <div className="flex flex-wrap w-full h-auto rounded-xl my-8">
         {blogPosts.map((post: any) => {
           const imageUrl = post.fields.coverImage?.fields?.file?.url;
           const title = post.fields.title;
