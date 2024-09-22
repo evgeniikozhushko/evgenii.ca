@@ -1,5 +1,5 @@
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'; // Import rich text renderer
-import { MARKS, BLOCKS } from '@contentful/rich-text-types'; // Import rich text types
+import { MARKS, BLOCKS, INLINES } from '@contentful/rich-text-types'; // Import rich text types
 
 import { getAllPosts } from "@/contentful/core";
 import DefaultLayout from "@/layouts/default";
@@ -68,18 +68,32 @@ export default function IndexPage() {
           ),
           [BLOCKS.PARAGRAPH]: (_node: any, children: any) => (
             <p className="custom-rich-text">{children}</p>
+          ),          
+          [INLINES.HYPERLINK]: (node: any, children: any) => (
+            <a href={node.data.uri} target="_blank" rel="noopener noreferrer" className="custom-link">
+              {children}
+            </a>
           ),
         },
-        renderText: (text: any) => {
-          return (
-            <span style={{ whiteSpace: 'pre-wrap' }}>
-              {text.split("\n").reduce((children: any, textSegment: any, index: any) => {
-                return [...children, index > 0 && <br key={index} />, textSegment];
-              }, [])}
-            </span>
-          );
-        },
+
+        renderText: (text: any) => (
+          <span style={{ whiteSpace: 'pre-wrap' }}>
+            {text.split('\n').reduce((children: any, textSegment: any, index: any) => {
+              return [...children, index > 0 && <br key={index} />, textSegment];
+            }, [])}
+          </span>
+        ),        
+
+        // renderText: (text: any) => {
+        //   return (
+        //     <span style={{ whiteSpace: 'pre-wrap' }}>
+        //       {text}
+        //     </span>
+        //   );
+        // }        
       };
+      // Render rich text content - preserve whitespace
+
       return (
         <div className="contentful-rich-text">
           {documentToReactComponents(content, contentfulOptions)}

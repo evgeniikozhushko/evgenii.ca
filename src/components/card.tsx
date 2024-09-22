@@ -10,7 +10,6 @@ interface CardProps {
   className?: string; // Accept custom class name prop
 }
 
-
 export default function Card({ title, imageUrl, className }: CardProps) {
   // Log the image URL for debugging
   console.log("Image URL:", imageUrl);

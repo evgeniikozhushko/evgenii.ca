@@ -44,3 +44,16 @@
   border-radius: 4px;
   font-family: monospace;
 }
+
+/* Custom link styles */
+
+.custom-link {
+  color: #0071f3; /* Your desired link color */
+  text-decoration: underline;
+}
+
+.custom-link:hover {
+  color: #0366d6;
+  text-decoration: none;
+}
+  
