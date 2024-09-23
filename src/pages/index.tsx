@@ -1,9 +1,7 @@
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'; // Import rich text renderer
-import { MARKS, BLOCKS, INLINES } from '@contentful/rich-text-types'; // Import rich text types
-
+import { MARKS, BLOCKS, INLINES } from '@contentful/rich-text-types';// Import rich text types
 import { getAllPosts } from "@/contentful/core";
 import DefaultLayout from "@/layouts/default";
-
 import { useEffect, useState } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
@@ -68,14 +66,13 @@ export default function IndexPage() {
           ),
           [BLOCKS.PARAGRAPH]: (_node: any, children: any) => (
             <p className="custom-rich-text">{children}</p>
-          ),          
+          ),
           [INLINES.HYPERLINK]: (node: any, children: any) => (
             <a href={node.data.uri} target="_blank" rel="noopener noreferrer" className="custom-link">
               {children}
             </a>
           ),
         },
-
         renderText: (text: any) => (
           <span style={{ whiteSpace: 'pre-wrap' }}>
             {text.split('\n').reduce((children: any, textSegment: any, index: any) => {
@@ -83,22 +80,8 @@ export default function IndexPage() {
             }, [])}
           </span>
         ),        
-
-        // renderText: (text: any) => {
-        //   return (
-        //     <span style={{ whiteSpace: 'pre-wrap' }}>
-        //       {text}
-        //     </span>
-        //   );
-        // }        
       };
-      // Render rich text content - preserve whitespace
-
-      return (
-        <div className="contentful-rich-text">
-          {documentToReactComponents(content, contentfulOptions)}
-        </div>
-      );
+      return documentToReactComponents(content, contentfulOptions); // Apply rich text rendering
     }
     return <p>{defaultContent}</p>; // Fallback for no content
   };
@@ -125,7 +108,7 @@ export default function IndexPage() {
               const imageUrl = post.fields.coverImage?.fields?.file?.url || fallbackImage;
               const title = post.fields.title;
               const postContent = post.fields.content;
-              console.log('Contentful field returned:', post.fields);
+
               return (
                 <AccordionItem
                   key={post.sys.id}
@@ -153,8 +136,8 @@ export default function IndexPage() {
 }
 
 
-{/* Large Format Image */ }
-{/* <div className="mt-8 w-full">
+ {/* Large Format Image */}
+        {/* <div className="mt-8 w-full">
             <Link to="/intro">
               <img 
                 src={blogPosts[0].fields.coverImage?.fields?.file?.url}
@@ -163,9 +146,9 @@ export default function IndexPage() {
               />
             </Link>
           </div> */}
-
-{/* Card Section */ }
-{/* <div className="flex flex-wrap w-full h-auto rounded-xl my-8">
+          
+      {/* Card Section */}
+      {/* <div className="flex flex-wrap w-full h-auto rounded-xl my-8">
         {blogPosts.map((post: any) => {
           const imageUrl = post.fields.coverImage?.fields?.file?.url;
           const title = post.fields.title;
