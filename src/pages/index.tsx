@@ -1,5 +1,5 @@
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer'; // Import rich text renderer
-import { MARKS, BLOCKS, INLINES } from '@contentful/rich-text-types';// Import rich text types
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer"; // Import rich text renderer
+import { MARKS, BLOCKS, INLINES } from "@contentful/rich-text-types"; // Import rich text types
 import { getAllPosts } from "@/contentful/core";
 import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
@@ -7,8 +7,10 @@ import { Accordion, AccordionItem } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
 
 export default function IndexPage() {
-  const defaultContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
-  const fallbackImage = "//images.ctfassets.net/vrssbejn74f5/1TddS8rtGvdvzXmvIzSnZU/4c436f876730492e22d6923d2d803ead/2023_BVCAS_blog.jpg";
+  const defaultContent =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+  const fallbackImage =
+    "//images.ctfassets.net/vrssbejn74f5/1TddS8rtGvdvzXmvIzSnZU/4c436f876730492e22d6923d2d803ead/2023_BVCAS_blog.jpg";
 
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
   const [displayImage, setDisplayImage] = useState<string>(fallbackImage);
@@ -16,20 +18,23 @@ export default function IndexPage() {
   useEffect(() => {
     const getBlogData = async () => {
       const blogData = await getAllPosts();
-      console.log('Full Blog Data Response:', blogData); // Log full response
+      console.log("Full Blog Data Response:", blogData); // Log full response
       if (blogData) {
-        console.log('Fetched Blog Data:', blogData.items); // Log full structure
-        const filteredPosts = blogData.items.filter((post: any) => post.fields.title !== "Intro");
+        console.log("Fetched Blog Data:", blogData.items); // Log full structure
+        const filteredPosts = blogData.items.filter(
+          (post: any) => post.fields.title !== "Intro"
+        );
         setBlogPosts(filteredPosts);
       }
     };
 
-    getBlogData(); // Call the async function   
+    getBlogData(); // Call the async function
   }, []);
 
   // Function to render rich text content from Contentful
   const renderPostContent = (content: any) => {
-    if (content && content.nodeType === 'document') { // Ensure it's valid rich text
+    if (content && content.nodeType === "document") {
+      // Ensure it's valid rich text
       const contentfulOptions = {
         renderMark: {
           [MARKS.CODE]: (embedded: any) => (
@@ -43,43 +48,52 @@ export default function IndexPage() {
         renderNode: {
           "embedded-asset-block": (node: any) => (
             <img
-              className="responsive-img-class m-t20 m-b30" // Use a responsive image class
+              className="max-w-full h-auto my-5" // Adjusted for responsiveness
               src={node.data.target.fields.file.url}
               alt={node.data.target.fields.title || "Image"}
             />
           ),
-          [BLOCKS.QUOTE]: (_node: any, children: any) => (
-            <div className="quote-wrapper p-4 m-lr30">
-              <blockquote className="custom-blockquote">
-                <span className="quote-text">{children}</span>
-              </blockquote>
-            </div>
+          [BLOCKS.PARAGRAPH]: (_node: any, children: any) => (
+            <p className="whitespace-pre-wrap">{children}</p>
           ),
           [BLOCKS.UL_LIST]: (_node: any, children: any) => (
-            <ul className="custom-ul-list m-tb60 m-lr20">{children}</ul>
+            <ul className="list-disc pl-5">{children}</ul>
           ),
           [BLOCKS.OL_LIST]: (_node: any, children: any) => (
-            <ol className="custom-ol-list m-tb40 m-lr20">{children}</ol>
+            <ol className="list-decimal pl-5">{children}</ol>
           ),
           [BLOCKS.LIST_ITEM]: (_node: any, children: any) => (
-            <li className="custom-list-item p-tb10">{children}</li>
+            <li className="mb-2">{children}</li>
           ),
-          [BLOCKS.PARAGRAPH]: (_node: any, children: any) => (
-            <p className="custom-rich-text">{children}</p>
+          [BLOCKS.QUOTE]: (_node: any, children: any) => (
+            <blockquote className="border-l-4 border-gray-300 pl-4 text-gray-600 italic">
+              {children}
+            </blockquote>
           ),
           [INLINES.HYPERLINK]: (node: any, children: any) => (
-            <a href={node.data.uri} target="_blank" rel="noopener noreferrer" className="custom-link">
+            <a
+              href={node.data.uri}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline hover:text-blue-800 hover:no-underline"
+            >
               {children}
             </a>
           ),
         },
         renderText: (text: any) => (
-          <span style={{ whiteSpace: 'pre-wrap' }}>
-            {text.split('\n').reduce((children: any, textSegment: any, index: any) => {
-              return [...children, index > 0 && <br key={index} />, textSegment];
-            }, [])}
+          <span style={{ whiteSpace: "pre-wrap" }}>
+            {text
+              .split("\n")
+              .reduce((children: any, textSegment: any, index: any) => {
+                return [
+                  ...children,
+                  index > 0 && <br key={index} />,
+                  textSegment,
+                ];
+              }, [])}
           </span>
-        ),        
+        ),
       };
       return documentToReactComponents(content, contentfulOptions); // Apply rich text rendering
     }
@@ -105,7 +119,8 @@ export default function IndexPage() {
         <div className="w-1/2">
           <Accordion>
             {blogPosts.map((post: any) => {
-              const imageUrl = post.fields.coverImage?.fields?.file?.url || fallbackImage;
+              const imageUrl =
+                post.fields.coverImage?.fields?.file?.url || fallbackImage;
               const title = post.fields.title;
               const postContent = post.fields.content;
 
@@ -116,7 +131,9 @@ export default function IndexPage() {
                   title={title}
                   onClick={() => setDisplayImage(imageUrl)}
                 >
-                  {postContent ? renderPostContent(postContent) : defaultContent}
+                  {postContent
+                    ? renderPostContent(postContent)
+                    : defaultContent}
                 </AccordionItem>
               );
             })}
@@ -135,9 +152,11 @@ export default function IndexPage() {
   );
 }
 
-
- {/* Large Format Image */}
-        {/* <div className="mt-8 w-full">
+{
+  /* Large Format Image */
+}
+{
+  /* <div className="mt-8 w-full">
             <Link to="/intro">
               <img 
                 src={blogPosts[0].fields.coverImage?.fields?.file?.url}
@@ -145,10 +164,14 @@ export default function IndexPage() {
                 className="w-full h-auto rounded-xl hover:scale-105 transition-transform duration-700 ease-in-out"
               />
             </Link>
-          </div> */}
-          
-      {/* Card Section */}
-      {/* <div className="flex flex-wrap w-full h-auto rounded-xl my-8">
+          </div> */
+}
+
+{
+  /* Card Section */
+}
+{
+  /* <div className="flex flex-wrap w-full h-auto rounded-xl my-8">
         {blogPosts.map((post: any) => {
           const imageUrl = post.fields.coverImage?.fields?.file?.url;
           const title = post.fields.title;
@@ -162,4 +185,5 @@ export default function IndexPage() {
             />
           );
         })}
-      </div> */}
+      </div> */
+}
