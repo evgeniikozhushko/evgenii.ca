@@ -24,6 +24,7 @@ const fetchLightLogo = async () => {
   try {
     const asset = await contentfulClient.getAsset('5a9M6OeE3ahl6acbTv7x9c'); // Light mode logo asset ID
     if (asset.fields.file) {
+      console.log("asset.theme.files", asset.fields.file)
       return `https:${asset.fields.file.url}`;
     }
     console.error('Error fetching light logo from Contentful: Asset file is undefined');

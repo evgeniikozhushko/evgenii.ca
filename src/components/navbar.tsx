@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Button } from "@nextui-org/button";
 import { Kbd } from "@nextui-org/kbd";
 import { Link } from "@nextui-org/link";
@@ -30,26 +30,56 @@ import {
 
 export const Navbar = () => {
   const { theme } = useTheme(); // Track current theme (dark or light)
-  // const [logoUrl, setLogoUrl] = useState<string | null>(null);
-  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  console.log("the theme", theme)
+  const [logos, setLogos] = useState<{
+    light: string | null;
+    dark: string | null;
+  }>({
+    light: null,
+    dark: null,
+  });
   const [loading, setLoading] = useState(true); // For initial loading state
 
-    // Preload both logos on mount
-    // Fetch the appropriate logo when the theme changes
+  // Fetch both logos on mount
   useEffect(() => {
-    const setLogoBasedOnTheme = async () => {
-      setLoading(true); // Show loading state
-      const logo = theme === "dark" ? await fetchDarkLogo() : await fetchLightLogo();
-      setLogoUrl(logo);
-      setLoading(false); // Hide loading state once the logo is set
+    const fetchLogos = async () => {
+      try {
+        const [lightLogo, darkLogo] = await Promise.all([
+          fetchLightLogo(),
+          fetchDarkLogo(),
+        ]);
+        console.log("lightLogo", lightLogo)
+        console.log("darkLogo", darkLogo)
+        setLogos({ light: lightLogo, dark: darkLogo });
+      } catch (error) {
+        console.error("Error fetching logos:", error);
+      } finally {
+        setLoading(false); // Hide loading state once the logos are fetched
+      }
     };
 
-    setLogoBasedOnTheme(); // Fetch the correct logo when the theme changes
-  }, [theme]); // Depend on the theme state
+    fetchLogos();
+  }, []); // Empty dependency array to run only once on mount
+
+  // const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  // const [loading, setLoading] = useState(true);
+
+  // Preload both logos on mount
+  // Fetch the appropriate logo when the theme changes
+  // useEffect(() => {
+  //   const setLogoBasedOnTheme = async () => {
+  //     setLoading(true);
+  //     const logo = theme === "dark" ? await fetchDarkLogo() : await fetchLightLogo();
+  //     setLogoUrl(logo);
+  //     setLoading(false);
+  //   };
+
+  //   setLogoBasedOnTheme();
+  // }, [theme]);
 
   const searchInput = (
     <Input
-      aria-label="Search" 
+      aria-label="Search"
       classNames={{
         inputWrapper: "bg-default-100",
         input: "text-sm",
@@ -73,11 +103,13 @@ export const Navbar = () => {
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <Link
-            className="flex justify-start items-center gap-1 pl-6 hover:skew-x-6 hover:scale-125 transition-transform duration-500 ease-in-out"
+            className="flex justify-start items-center gap-1 pl-0 sm:pl-2 md:pl-4 lg:pl-6 hover:skew-x-6 hover:scale-125 transition-transform duration-500 ease-in-out"
             color="foreground"
             href="/"
           >
-            {!loading && logoUrl && <img src={logoUrl} alt="Site Logo" width="30" height="40" />}
+            {!loading && theme && logos[theme] && (
+              <img src={logos[theme]} alt="Site Logo" width="30" height="40" />
+            )}
             {/* {logoUrl && <img src={logoUrl} alt="Site Logo" width="40" height="50" />} */}
             {/* <Logo /> */}
             {/* <p className="font-bold text-inherit">evgenii.ca</p> */}
@@ -89,7 +121,7 @@ export const Navbar = () => {
               <Link
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
+                  "data-[active=true]:text-primary data-[active=true]:font-medium"
                 )}
                 color="foreground"
                 href={item.href}
