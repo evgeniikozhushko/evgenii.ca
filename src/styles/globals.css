@@ -2,13 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Custom Rich Text Styling */
-.custom-rich-text {
+/* Custom Rich Text Styling - converted css rules */
+/* .custom-rich-text {
   @apply whitespace-pre-wrap;
 }
 
@@ -22,35 +17,35 @@
 
 .custom-list-item {
   @apply mb-2;
-}
+} */
 
 /* Blockquote Styles */
-.quote-wrapper {
+/* .quote-wrapper {
   @apply border-l-4 border-gray-300 pl-4 text-gray-600;
 }
 
 .custom-blockquote {
   @apply italic;
-}
+} */
 
 /* Responsive Image */
-.responsive-img-class {
+/* .responsive-img-class {
   @apply max-w-full h-auto;
-}
+} */
 
 /* Code Block */
-.code-block-wrapper {
+/* .code-block-wrapper {
   @apply bg-gray-100 p-4 rounded font-mono overflow-x-auto;
-}
+} */
 
 /* Custom Link Styles */
-.custom-link {
+/* .custom-link {
   @apply text-blue-600 underline;
 }
 
 .custom-link:hover {
   @apply text-blue-800 no-underline;
-}
+} */
 
 /* CSS rule to any element that wraps your rich text content (such as paragraphs). */
 /* .custom-rich-text {

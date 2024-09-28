@@ -5,6 +5,7 @@ import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
+import { Key } from "react";
 
 export default function IndexPage() {
   const defaultContent =
@@ -13,7 +14,8 @@ export default function IndexPage() {
     "//images.ctfassets.net/vrssbejn74f5/1TddS8rtGvdvzXmvIzSnZU/4c436f876730492e22d6923d2d803ead/2023_BVCAS_blog.jpg";
 
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
-  const [displayImage, setDisplayImage] = useState<string>(fallbackImage);
+  // const [displayImage, setDisplayImage] = useState<string>(fallbackImage);
+  const [displayImage, setDisplayImage] = useState<string | null>(null);
 
   useEffect(() => {
     const getBlogData = async () => {
@@ -33,6 +35,7 @@ export default function IndexPage() {
 
   // Function to render rich text content from Contentful
   const renderPostContent = (content: any) => {
+    console.log("logging content", content);
     if (content && content.nodeType === "document") {
       // Ensure it's valid rich text
       const contentfulOptions = {
@@ -102,34 +105,75 @@ export default function IndexPage() {
 
   if (!blogPosts.length) return <p>Loading...</p>;
 
+  // Handling Accordion Selection Changes
+  // const handleSelectionChange = (keys: string | Set<Key>) => {
+  //   const selectedKeys = typeof keys === "string" ? new Set([keys]) : keys;
+  //   if (selectedKeys.size > 0) {
+  //     const openKey = Array.from(selectedKeys)[0];
+  //     const openPost = blogPosts.find((post) => post.sys.id === openKey);
+  //     if (openPost) {
+  //       const imageUrl =
+  //         openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
+  //       setDisplayImage(imageUrl);
+  //     }
+  //   } else {
+  //     // All tabs are closed
+  //     setDisplayImage(null);
+  //   }
+  // };
+
+  // Handling Accordion Selection Changes
+  const handleSelectionChange = (keys: Set<Key>) => {
+    if (keys.size > 0) {
+      const openKey = Array.from(keys)[0];
+      const openPost = blogPosts.find((post) => post.sys.id === openKey);
+      if (openPost) {
+        const imageUrl =
+          openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
+        setDisplayImage(imageUrl);
+      }
+    } else {
+      // All tabs are closed
+      setDisplayImage(null);
+    }
+  };  
+
   return (
     <DefaultLayout>
       {/* Hero Section */}
-      <div className="flex flex-col items-start p-8">
-        <h1 className="text-4xl md:text-4xl lg:text-4xl font-extrabold leading-tight hover:skew-x-6 hover:scale-110 transition-transform duration-700 ease-in-out">
+      <div className="flex flex-col items-start p-4 md:p-8">
+        <h1 className="text-3xl md:text-3xl lg:text-3xl font-extrabold leading-tight hover:skew-x-6 hover:scale-110 transition-transform duration-700 ease-in-out">
           evgenii.ca
         </h1>
-        <p className="text-lg md:text-xl lg:text-2xl font-extralight mt-4 hover:skew-x-3 hover:scale-105 transition-transform duration-700 ease-in-out">
+        <p className="text-md md:text-lg lg:text-lg font-extralight mt-2 md:mt-4 hover:skew-x-3 hover:scale-105 transition-transform duration-700 ease-in-out">
           design + web development
         </p>
       </div>
 
       {/* Accordion and Image Section */}
-      <div className="flex items-start p-8 space-x-8">
-        <div className="w-1/2">
-          <Accordion>
+      <div className="flex flex-col md:flex-row items-start p-4 md:p-8 md:space-x-8">
+        {" "}
+        {/* Add className="prose" */}
+        <div className="w-full md:w-1/2">
+          <Accordion
+            onSelectionChange={handleSelectionChange}
+            selectionMode="single"
+          >
             {blogPosts.map((post: any) => {
-              const imageUrl =
-                post.fields.coverImage?.fields?.file?.url || fallbackImage;
+              // const imageUrl =
+              //   post.fields.coverImage?.fields?.file?.url || fallbackImage;
+              // const title = post.fields.title;
+              // const postContent = post.fields.content;
               const title = post.fields.title;
               const postContent = post.fields.content;
+              const key = post.sys.id;
 
               return (
                 <AccordionItem
                   key={post.sys.id}
                   aria-label={title}
                   title={title}
-                  onClick={() => setDisplayImage(imageUrl)}
+                  // onClick={() => setDisplayImage(imageUrl)}
                 >
                   {postContent
                     ? renderPostContent(postContent)
@@ -139,13 +183,31 @@ export default function IndexPage() {
             })}
           </Accordion>
         </div>
-        <div className="flex w-1/2 justify-end">
+        {/* <div
+          className={`flex w-full md:w-1/2 justify-end mt-8 md:mt-0 ${
+            displayImage ? "" : "hidden"
+          }`}
+        >
           <Image
             isZoomed
             width={"100%"}
             alt="Project Image"
-            src={displayImage} // Display the selected image
+            src={displayImage || fallbackImage} // Display the selected image
           />
+        </div> */}
+        <div
+          className={`flex w-full md:w-1/2 justify-end mt-8 md:mt-0 ${
+            displayImage ? "" : "hidden"
+          }`}
+        >
+          {displayImage && (
+            <Image
+              isZoomed
+              width={"100%"}
+              alt="Project Image"
+              src={displayImage}
+            />
+          )}
         </div>
       </div>
     </DefaultLayout>
