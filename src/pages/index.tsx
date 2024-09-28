@@ -106,10 +106,26 @@ export default function IndexPage() {
   if (!blogPosts.length) return <p>Loading...</p>;
 
   // Handling Accordion Selection Changes
-  const handleSelectionChange = (keys: string | Set<Key>) => {
-    const selectedKeys = typeof keys === "string" ? new Set([keys]) : keys;
-    if (selectedKeys.size > 0) {
-      const openKey = Array.from(selectedKeys)[0];
+  // const handleSelectionChange = (keys: string | Set<Key>) => {
+  //   const selectedKeys = typeof keys === "string" ? new Set([keys]) : keys;
+  //   if (selectedKeys.size > 0) {
+  //     const openKey = Array.from(selectedKeys)[0];
+  //     const openPost = blogPosts.find((post) => post.sys.id === openKey);
+  //     if (openPost) {
+  //       const imageUrl =
+  //         openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
+  //       setDisplayImage(imageUrl);
+  //     }
+  //   } else {
+  //     // All tabs are closed
+  //     setDisplayImage(null);
+  //   }
+  // };
+
+  // Handling Accordion Selection Changes
+  const handleSelectionChange = (keys: Set<Key>) => {
+    if (keys.size > 0) {
+      const openKey = Array.from(keys)[0];
       const openPost = blogPosts.find((post) => post.sys.id === openKey);
       if (openPost) {
         const imageUrl =
@@ -120,16 +136,16 @@ export default function IndexPage() {
       // All tabs are closed
       setDisplayImage(null);
     }
-  };
+  };  
 
   return (
     <DefaultLayout>
       {/* Hero Section */}
       <div className="flex flex-col items-start p-4 md:p-8">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight hover:skew-x-6 hover:scale-110 transition-transform duration-700 ease-in-out">
+        <h1 className="text-3xl md:text-3xl lg:text-3xl font-extrabold leading-tight hover:skew-x-6 hover:scale-110 transition-transform duration-700 ease-in-out">
           evgenii.ca
         </h1>
-        <p className="text-md md:text-lg lg:text-xl font-extralight mt-2 md:mt-4 hover:skew-x-3 hover:scale-105 transition-transform duration-700 ease-in-out">
+        <p className="text-md md:text-lg lg:text-lg font-extralight mt-2 md:mt-4 hover:skew-x-3 hover:scale-105 transition-transform duration-700 ease-in-out">
           design + web development
         </p>
       </div>
@@ -144,17 +160,20 @@ export default function IndexPage() {
             selectionMode="single"
           >
             {blogPosts.map((post: any) => {
-              const imageUrl =
-                post.fields.coverImage?.fields?.file?.url || fallbackImage;
+              // const imageUrl =
+              //   post.fields.coverImage?.fields?.file?.url || fallbackImage;
+              // const title = post.fields.title;
+              // const postContent = post.fields.content;
               const title = post.fields.title;
               const postContent = post.fields.content;
+              const key = post.sys.id;
 
               return (
                 <AccordionItem
                   key={post.sys.id}
                   aria-label={title}
                   title={title}
-                  onClick={() => setDisplayImage(imageUrl)}
+                  // onClick={() => setDisplayImage(imageUrl)}
                 >
                   {postContent
                     ? renderPostContent(postContent)
@@ -164,7 +183,7 @@ export default function IndexPage() {
             })}
           </Accordion>
         </div>
-        <div
+        {/* <div
           className={`flex w-full md:w-1/2 justify-end mt-8 md:mt-0 ${
             displayImage ? "" : "hidden"
           }`}
@@ -175,6 +194,20 @@ export default function IndexPage() {
             alt="Project Image"
             src={displayImage || fallbackImage} // Display the selected image
           />
+        </div> */}
+        <div
+          className={`flex w-full md:w-1/2 justify-end mt-8 md:mt-0 ${
+            displayImage ? "" : "hidden"
+          }`}
+        >
+          {displayImage && (
+            <Image
+              isZoomed
+              width={"100%"}
+              alt="Project Image"
+              src={displayImage}
+            />
+          )}
         </div>
       </div>
     </DefaultLayout>

@@ -113,7 +113,7 @@ export default function IntroPage() {
       <div className="flex flex-col lg:flex-row items-start p-8 gap-8">
         {/* Text Section */}
         <div className="flex-1">
-          <h1 className="text-4xl md:text-4xl lg:text-4xl font-extrabold leading-tight hover:skew-y-1 hover:scale-105 transition-transform duration-700 ease-in-out">
+          <h1 className="text-2xl md:text-2xl lg:text-2xl font-extrabold leading-tight hover:skew-y-1 hover:scale-105 transition-transform duration-700 ease-in-out">
             {title || "Intro Title"}
           </h1>
 
