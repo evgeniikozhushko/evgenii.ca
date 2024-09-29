@@ -5,7 +5,8 @@ import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
-import { Key } from "react";
+// import { Key } from "react";
+import { Selection } from '@react-types/shared'; // Import the Selection type
 
 export default function IndexPage() {
   const defaultContent =
@@ -123,20 +124,37 @@ export default function IndexPage() {
   // };
 
   // Handling Accordion Selection Changes
-  const handleSelectionChange = (keys: Set<Key>) => {
-    if (keys.size > 0) {
-      const openKey = Array.from(keys)[0];
+  // const handleSelectionChange = (keys: Set<Key>) => {
+  //   if (keys.size > 0) {
+  //     const openKey = Array.from(keys)[0];
+  //     const openPost = blogPosts.find((post) => post.sys.id === openKey);
+  //     if (openPost) {
+  //       const imageUrl =
+  //         openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
+  //       setDisplayImage(imageUrl);
+  //     }
+  //   } else {
+  //     // All tabs are closed
+  //     setDisplayImage(null);
+  //   }
+  // };  
+
+  const handleSelectionChange = (keys: Selection) => {
+    // Convert keys to an array
+    const selectedKeys = Array.from(keys);
+  
+    if (selectedKeys.length > 0) {
+      const openKey = selectedKeys[0]; // Assume the first selected key
       const openPost = blogPosts.find((post) => post.sys.id === openKey);
       if (openPost) {
-        const imageUrl =
-          openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
+        const imageUrl = openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
         setDisplayImage(imageUrl);
       }
     } else {
-      // All tabs are closed
+      // Handle the case where no keys are selected
       setDisplayImage(null);
     }
-  };  
+  };
 
   return (
     <DefaultLayout>

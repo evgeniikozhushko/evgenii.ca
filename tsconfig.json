@@ -20,8 +20,10 @@
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+
+    // prefer to ignore unused variables during the build "noUnusedLocals": false and "noUnusedParameters": false
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"],

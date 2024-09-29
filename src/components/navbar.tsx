@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "@nextui-org/button";
+// import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Kbd } from "@nextui-org/kbd";
 import { Link } from "@nextui-org/link";
 import { Input } from "@nextui-org/input";
@@ -23,7 +23,6 @@ import {
   TwitterIcon,
   GithubIcon,
   DiscordIcon,
-  HeartFilledIcon,
   SearchIcon,
 } from "@/components/icons";
 // import { Logo } from "@/components/icons";
