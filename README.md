@@ -34,8 +34,8 @@ Custom Animations: Subtle CSS transitions and hover effects add an engaging touc
 
 This project not only showcases my technical proficiency with modern web technologies but also my ability to combine design principles with functionality to create an elegant, user-friendly website.
 
-[evgenii.ca]([https://vitejs.dev/guide/](https://evgenii-ca.onrender.com/
-))
+[evgenii.ca](https://evgenii-ca.onrender.com/)
+
 ### Technologies Used
 
 - [Vite](https://vitejs.dev/guide/)
