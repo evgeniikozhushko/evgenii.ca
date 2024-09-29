@@ -4,11 +4,6 @@ My name is Evgenii, welcome to my personal website.
 
 I'm a designer and web developer based in Canmore, Alberta.
 
-I bring my creative skills to building modern, elegant, and functional websites for small businesses.
-I employ technologies like React, Next.js, Tailwind, MongoDB, and Express, as well as no-code platforms, to deliver seamless and visually appealing solutions.
-
-Let's connect and explore the right web strategy for you.
-
 ## Website Summary
 
 This website is a modern and dynamic platform showcasing my expertise in web development and design. It leverages the following technologies and design principles:
@@ -39,6 +34,8 @@ Custom Animations: Subtle CSS transitions and hover effects add an engaging touc
 
 This project not only showcases my technical proficiency with modern web technologies but also my ability to combine design principles with functionality to create an elegant, user-friendly website.
 
+[evgenii.ca]([https://vitejs.dev/guide/](https://evgenii-ca.onrender.com/
+))
 ### Technologies Used
 
 - [Vite](https://vitejs.dev/guide/)
