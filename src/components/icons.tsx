@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { IconSvgProps } from "@/types";
+import { Linkedin, Instagram} from 'lucide-react';
 
 export const Logo: React.FC<IconSvgProps> = ({
   size = 36,
@@ -87,6 +88,17 @@ export const GithubIcon: React.FC<IconSvgProps> = ({
     </svg>
   );
 };
+
+// Lucide icons
+
+export const LinkedinIcon: React.FC<IconSvgProps> = (props) => (
+  <Linkedin {...props} />
+);
+
+export const InstagramIcon: React.FC<IconSvgProps> = (props) => (
+  <Instagram {...props} />
+);
+
 
 export const MoonFilledIcon = ({
   size = 24,
