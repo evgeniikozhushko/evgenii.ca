@@ -20,11 +20,11 @@ import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { useTheme } from "@/hooks/use-theme"; // Import useTheme hook
 import {
-  TwitterIcon,
   GithubIcon,
   DiscordIcon,
   SearchIcon,
 } from "@/components/icons";
+import { LinkedinIcon, InstagramIcon } from "@/components/icons";
 // import { Logo } from "@/components/icons";
 
 export const Navbar = () => {
@@ -137,14 +137,17 @@ export const Navbar = () => {
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
-          <Link isExternal href={siteConfig.links.twitter}>
-            <TwitterIcon className="text-default-500" />
+          <Link isExternal href={siteConfig.links.github}>
+            <GithubIcon className="text-default-500" />
+          </Link>
+          <Link isExternal href={siteConfig.links.linkedin}>
+            <LinkedinIcon className="text-default-500" />
+          </Link>
+          <Link isExternal href={siteConfig.links.instagram}>
+            <InstagramIcon className="text-default-500" />
           </Link>
           <Link isExternal href={siteConfig.links.discord}>
             <DiscordIcon className="text-default-500" />
-          </Link>
-          <Link isExternal href={siteConfig.links.github}>
-            <GithubIcon className="text-default-500" />
           </Link>
           <ThemeSwitch />
         </NavbarItem>
