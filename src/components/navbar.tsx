@@ -38,6 +38,7 @@ export const Navbar = () => {
     dark: null,
   });
   const [loading, setLoading] = useState(true); // For initial loading state
+  const [menuOpen, setMenuOpen] = useState(false); // Add state for menu toggle
 
   // Fetch both logos on mount
   useEffect(() => {
@@ -76,6 +77,7 @@ export const Navbar = () => {
   //   setLogoBasedOnTheme();
   // }, [theme]);
 
+  // Search input field
   const searchInput = (
     <Input
       aria-label="Search"
@@ -171,15 +173,17 @@ export const Navbar = () => {
           <GithubIcon className="text-default-500" />
         </Link>
         <ThemeSwitch />
-        <NavbarMenuToggle />
+        <NavbarMenuToggle /> {/* Toggle menu */}
       </NavbarContent>
 
+      {/* <NavbarMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)}> */}
       <NavbarMenu>
         {searchInput}
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navMenuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link
+              
                 color={
                   index === 2
                     ? "primary"
@@ -187,8 +191,9 @@ export const Navbar = () => {
                       ? "danger"
                       : "foreground"
                 }
-                href="#"
+                href={item.href}
                 size="lg"
+                onClick={() => setMenuOpen(false)} // Close the menu on click
               >
                 {item.label}
               </Link>

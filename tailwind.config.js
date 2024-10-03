@@ -11,7 +11,11 @@ module.exports = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      listStyleType: {
+        'upper-roman': 'upper-roman',
+      },
+    },
   },
   darkMode: "class",
   plugins: [nextui()],

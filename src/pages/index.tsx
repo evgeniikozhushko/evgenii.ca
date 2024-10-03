@@ -61,7 +61,7 @@ export default function IndexPage() {
             <p className="whitespace-pre-wrap">{children}</p>
           ),
           [BLOCKS.UL_LIST]: (_node: any, children: any) => (
-            <ul className="list-disc pl-5">{children}</ul>
+            <ul className="list-upper-roman pl-5">{children}</ul>
           ),
           [BLOCKS.OL_LIST]: (_node: any, children: any) => (
             <ol className="list-decimal pl-5">{children}</ol>
