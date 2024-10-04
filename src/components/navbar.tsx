@@ -19,17 +19,13 @@ import { fetchLightLogo, fetchDarkLogo } from "@/contentful/core"; // Import log
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { useTheme } from "@/hooks/use-theme"; // Import useTheme hook
-import {
-  GithubIcon,
-  DiscordIcon,
-  SearchIcon,
-} from "@/components/icons";
+import { GithubIcon, DiscordIcon, SearchIcon } from "@/components/icons";
 import { LinkedinIcon, InstagramIcon } from "@/components/icons";
 // import { Logo } from "@/components/icons";
 
 export const Navbar = () => {
   const { theme } = useTheme(); // Track current theme (dark or light)
-  console.log("the theme", theme)
+  console.log("the theme", theme);
   const [logos, setLogos] = useState<{
     light: string | null;
     dark: string | null;
@@ -48,8 +44,8 @@ export const Navbar = () => {
           fetchLightLogo(),
           fetchDarkLogo(),
         ]);
-        console.log("lightLogo", lightLogo)
-        console.log("darkLogo", darkLogo)
+        console.log("lightLogo", lightLogo);
+        console.log("darkLogo", darkLogo);
         setLogos({ light: lightLogo, dark: darkLogo });
       } catch (error) {
         console.error("Error fetching logos:", error);
@@ -116,7 +112,7 @@ export const Navbar = () => {
             {/* <p className="font-bold text-inherit">evgenii.ca</p> */}
           </Link>
         </NavbarBrand>
-        <div className="hidden lg:flex gap-4 justify-start ml-2">
+        <div className="hidden md:flex gap-4 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <Link
@@ -138,21 +134,6 @@ export const Navbar = () => {
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <NavbarItem className="hidden sm:flex gap-2">
-          <Link isExternal href={siteConfig.links.github}>
-            <GithubIcon className="text-default-500" />
-          </Link>
-          <Link isExternal href={siteConfig.links.linkedin}>
-            <LinkedinIcon className="text-default-500" />
-          </Link>
-          <Link isExternal href={siteConfig.links.instagram}>
-            <InstagramIcon className="text-default-500" />
-          </Link>
-          <Link isExternal href={siteConfig.links.discord}>
-            <DiscordIcon className="text-default-500" />
-          </Link>
-          <ThemeSwitch />
-        </NavbarItem>
         {/* <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem> */}
         <NavbarItem className="hidden md:flex">
           {/* <Button
@@ -168,12 +149,27 @@ export const Navbar = () => {
         </NavbarItem>
       </NavbarContent>
 
-      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
+     {/* Icons and Search Bar */}
+      {/* Show these items on all screen sizes */}
+      <NavbarContent className="flex gap-2 basis-1/5 justify-end">
         <Link isExternal href={siteConfig.links.github}>
           <GithubIcon className="text-default-500" />
         </Link>
+        <Link isExternal href={siteConfig.links.linkedin}>
+          <LinkedinIcon className="text-default-500" />
+        </Link>
+        <Link isExternal href={siteConfig.links.instagram}>
+          <InstagramIcon className="text-default-500" />
+        </Link>
+        <Link isExternal href={siteConfig.links.discord}>
+          <DiscordIcon className="text-default-500" />
+        </Link>
         <ThemeSwitch />
-        <NavbarMenuToggle /> {/* Toggle menu */}
+      </NavbarContent>
+
+      {/* Show hamburger menu below 768px */}
+      <NavbarContent className="md:hidden basis-1 pl-4" justify="end">
+        <NavbarMenuToggle />
       </NavbarContent>
 
       {/* <NavbarMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)}> */}
@@ -183,7 +179,6 @@ export const Navbar = () => {
           {siteConfig.navMenuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link
-              
                 color={
                   index === 2
                     ? "primary"
