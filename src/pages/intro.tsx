@@ -118,7 +118,7 @@ export default function IntroPage() {
           </h1>
 
           {/* Description Section */}
-          <div className="text-sm md:text-sm lg:text-base font-extralight mt-4 pr-20 custom-rich-text">
+          <div className="text-sm md:text-sm lg:text-base font-extralight mt-4 pr-0 md:pr-20 custom-rich-text">
             {content ? (
               documentToReactComponents(content, contentfulOptions) // Render rich text content
             ) : (

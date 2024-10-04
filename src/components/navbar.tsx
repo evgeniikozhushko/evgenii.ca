@@ -38,6 +38,7 @@ export const Navbar = () => {
     dark: null,
   });
   const [loading, setLoading] = useState(true); // For initial loading state
+  const [menuOpen, setMenuOpen] = useState(false); // Add state for menu toggle
 
   // Fetch both logos on mount
   useEffect(() => {
@@ -76,6 +77,7 @@ export const Navbar = () => {
   //   setLogoBasedOnTheme();
   // }, [theme]);
 
+  // Search input field
   const searchInput = (
     <Input
       aria-label="Search"
@@ -114,7 +116,7 @@ export const Navbar = () => {
             {/* <p className="font-bold text-inherit">evgenii.ca</p> */}
           </Link>
         </NavbarBrand>
-        <div className="hidden lg:flex gap-4 justify-start ml-2">
+        <div className="hidden md:flex gap-4 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <Link
@@ -131,12 +133,13 @@ export const Navbar = () => {
           ))}
         </div>
       </NavbarContent>
-
+      
+      {/* Social icons */}
       <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
+        className="sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <NavbarItem className="hidden sm:flex gap-2">
+        <NavbarItem className="flex gap-2">
           <Link isExternal href={siteConfig.links.github}>
             <GithubIcon className="text-default-500" />
           </Link>
@@ -149,7 +152,7 @@ export const Navbar = () => {
           <Link isExternal href={siteConfig.links.discord}>
             <DiscordIcon className="text-default-500" />
           </Link>
-          <ThemeSwitch />
+          <ThemeSwitch className="hidden md:inline-block"/>
         </NavbarItem>
         {/* <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem> */}
         <NavbarItem className="hidden md:flex">
@@ -166,20 +169,20 @@ export const Navbar = () => {
         </NavbarItem>
       </NavbarContent>
 
-      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        <Link isExternal href={siteConfig.links.github}>
-          <GithubIcon className="text-default-500" />
-        </Link>
+      {/* Hamburger menu for mobile */}
+      <NavbarContent className="md:hidden basis-1 pl-4" justify="end">
         <ThemeSwitch />
         <NavbarMenuToggle />
       </NavbarContent>
 
+      {/* <NavbarMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)}> */}
       <NavbarMenu>
         {searchInput}
         <div className="mx-4 mt-2 flex flex-col gap-2">
           {siteConfig.navMenuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
               <Link
+              
                 color={
                   index === 2
                     ? "primary"
@@ -187,8 +190,9 @@ export const Navbar = () => {
                       ? "danger"
                       : "foreground"
                 }
-                href="#"
+                href={item.href}
                 size="lg"
+                onClick={() => setMenuOpen(false)} // Close the menu on click
               >
                 {item.label}
               </Link>
