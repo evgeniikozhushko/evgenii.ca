@@ -139,7 +139,7 @@ export const Navbar = () => {
         className="sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
-        <NavbarItem className="flex gap-2">
+        <NavbarItem className="flex gap-3">
           <Link isExternal href={siteConfig.links.github}>
             <GithubIcon className="text-default-500" />
           </Link>
