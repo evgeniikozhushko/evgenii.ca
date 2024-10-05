@@ -110,7 +110,7 @@ export default function IntroPage() {
   return (
     <DefaultLayout>
       {/* Hero Section */}
-      <div className="flex flex-col lg:flex-row items-start p-8 gap-8">
+      <div className="flex flex-col lg:flex-row items-start p-4 gap-8">
         {/* Text Section */}
         <div className="flex-1">
           <h1 className="text-2xl md:text-2xl lg:text-2xl font-extrabold leading-tight hover:skew-y-1 hover:scale-105 transition-transform duration-700 ease-in-out">
@@ -118,7 +118,7 @@ export default function IntroPage() {
           </h1>
 
           {/* Description Section */}
-          <div className="text-sm md:text-sm lg:text-base font-extralight mt-4 pr-0 md:pr-20 custom-rich-text">
+          <div className="text-base md:text-base lg:text-base font-extralight mt-4 pr-0 md:pr-20 custom-rich-text">
             {content ? (
               documentToReactComponents(content, contentfulOptions) // Render rich text content
             ) : (
