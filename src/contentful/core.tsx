@@ -19,35 +19,35 @@ const getAllPosts = async () => {
 }
 
 // Fetch light mode logo
-const fetchLightLogo = async () => {
-  try {
-    const asset = await contentfulClient.getAsset('5a9M6OeE3ahl6acbTv7x9c'); // Light mode logo asset ID
-    if (asset.fields.file) {
-      console.log("asset.theme.files", asset.fields.file)
-      return `https:${asset.fields.file.url}`;
-    }
-    console.error('Error fetching light logo from Contentful: Asset file is undefined');
-    return null;
-  } catch (error) {
-    console.error('Error fetching light logo from Contentful:', error);
-    return null;
-  }
-};
+// const fetchLightLogo = async () => {
+//   try {
+//     const asset = await contentfulClient.getAsset('5a9M6OeE3ahl6acbTv7x9c'); // Light mode logo asset ID
+//     if (asset.fields.file) {
+//       console.log("asset.theme.files", asset.fields.file)
+//       return `https:${asset.fields.file.url}`;
+//     }
+//     console.error('Error fetching light logo from Contentful: Asset file is undefined');
+//     return null;
+//   } catch (error) {
+//     console.error('Error fetching light logo from Contentful:', error);
+//     return null;
+//   }
+// };
 
 // Fetch dark mode logo
-const fetchDarkLogo = async () => {
-  try {
-    const asset = await contentfulClient.getAsset('4VXJNCzxU1zqhVrUQLGMYO'); // Dark mode logo asset ID
-    if (asset.fields.file) {
-      return `https:${asset.fields.file.url}`;
-    }
-    console.error('Error fetching dark logo from Contentful: Asset file is undefined');
-    return null;
-  } catch (error) {
-    console.error('Error fetching dark logo from Contentful:', error);
-    return null;
-  }
-};
+// const fetchDarkLogo = async () => {
+//   try {
+//     const asset = await contentfulClient.getAsset('4VXJNCzxU1zqhVrUQLGMYO'); // Dark mode logo asset ID
+//     if (asset.fields.file) {
+//       return `https:${asset.fields.file.url}`;
+//     }
+//     console.error('Error fetching dark logo from Contentful: Asset file is undefined');
+//     return null;
+//   } catch (error) {
+//     console.error('Error fetching dark logo from Contentful:', error);
+//     return null;
+//   }
+// };
 
 // // Fetch logo by asset ID
 // const fetchLogo = async () => {
@@ -66,7 +66,6 @@ const fetchDarkLogo = async () => {
 //     return null;
 //   }
 // };
-
   
 // // Fetch Intro Image by asset ID
 // const fetchIntroImage = async () => {
@@ -86,4 +85,4 @@ const fetchDarkLogo = async () => {
 //   }
 // };
 
-export { contentfulClient, getAllPosts, fetchLightLogo, fetchDarkLogo };
+export { contentfulClient, getAllPosts }; // Subtracted because not fetching from Contentful - fetchLightLogo, fetchDarkLogo 

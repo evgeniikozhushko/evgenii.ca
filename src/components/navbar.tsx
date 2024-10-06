@@ -14,7 +14,7 @@ import {
 } from "@nextui-org/navbar";
 import { link as linkStyles } from "@nextui-org/theme";
 import clsx from "clsx";
-import { fetchLightLogo, fetchDarkLogo } from "@/contentful/core"; // Import logo fetchers
+// import { fetchLightLogo, fetchDarkLogo } from "@/contentful/core";
 // import { fetchLogo } from "@/contentful/core";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -40,26 +40,29 @@ export const Navbar = () => {
   const [loading, setLoading] = useState(true); // For initial loading state
   const [menuOpen, setMenuOpen] = useState(false); // Add state for menu toggle
 
-  // Fetch both logos on mount
-  useEffect(() => {
-    const fetchLogos = async () => {
-      try {
-        const [lightLogo, darkLogo] = await Promise.all([
-          fetchLightLogo(),
-          fetchDarkLogo(),
-        ]);
-        console.log("lightLogo", lightLogo)
-        console.log("darkLogo", darkLogo)
-        setLogos({ light: lightLogo, dark: darkLogo });
-      } catch (error) {
-        console.error("Error fetching logos:", error);
-      } finally {
-        setLoading(false); // Hide loading state once the logos are fetched
-      }
-    };
+  // Define paths to the local logo images
+  const logoSrc = theme === "dark" ? "/logos/Evgenii_Logo_DarkMode.png" : "/logos/Evgenii_Logo_LightMode.png";
 
-    fetchLogos();
-  }, []); // Empty dependency array to run only once on mount
+  // Fetch both logos on mount
+  // useEffect(() => {
+  //   const fetchLogos = async () => {
+  //     try {
+  //       const [lightLogo, darkLogo] = await Promise.all([
+  //         fetchLightLogo(),
+  //         fetchDarkLogo(),
+  //       ]);
+  //       console.log("lightLogo", lightLogo)
+  //       console.log("darkLogo", darkLogo)
+  //       setLogos({ light: lightLogo, dark: darkLogo });
+  //     } catch (error) {
+  //       console.error("Error fetching logos:", error);
+  //     } finally {
+  //       setLoading(false); // Hide loading state once the logos are fetched
+  //     }
+  //   };
+
+  //   fetchLogos();
+  // }, []); // Empty dependency array to run only once on mount
 
   // const [logoUrl, setLogoUrl] = useState<string | null>(null);
   // const [loading, setLoading] = useState(true);
@@ -103,7 +106,7 @@ export const Navbar = () => {
     <NextUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
-          <Link
+          {/* <Link
             className="flex justify-start items-center gap-1 pl-0 sm:pl-2 md:pl-4 lg:pl-6 hover:skew-x-6 hover:scale-125 transition-transform duration-500 ease-in-out"
             color="foreground"
             href="/"
@@ -111,10 +114,11 @@ export const Navbar = () => {
             {!loading && theme && logos[theme] && (
               <img src={logos[theme]} alt="Site Logo" width="30" height="40" />
             )}
-            {/* {logoUrl && <img src={logoUrl} alt="Site Logo" width="40" height="50" />} */}
-            {/* <Logo /> */}
-            {/* <p className="font-bold text-inherit">evgenii.ca</p> */}
+          </Link> */}
+          <Link href="/">
+            <img src={logoSrc} alt="Evgenii.ca Logo" width="30" height="30" />
           </Link>
+            {/* {logoUrl && <img src={logoUrl} alt="Site Logo" width="40" height="50" />} */}
         </NavbarBrand>
         <div className="hidden md:flex gap-4 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
