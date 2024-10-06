@@ -159,7 +159,7 @@ export default function IndexPage() {
   return (
     <DefaultLayout>
       {/* Hero Section */}
-      <div className="flex flex-col items-start p-4 md:p-8">
+       <div className="flex flex-col items-start p-2 md:p-6 lg:p-2"> {/* md:p-8 */}
         <h1 className="text-3xl md:text-3xl lg:text-3xl font-extrabold leading-tight hover:skew-x-6 hover:scale-110 transition-transform duration-700 ease-in-out">
           evgenii.ca
         </h1>
@@ -169,7 +169,7 @@ export default function IndexPage() {
       </div>
 
       {/* Accordion and Image Section */}
-      <div className="flex flex-col md:flex-row items-start p-4 md:p-8 md:space-x-8">
+      <div className="flex flex-col md:flex-row items-start p-0 md:p-4 lg:px-0 md:space-x-8">
         {" "}
         {/* Add className="prose" */}
         <div className="w-full md:w-1/2">
