@@ -28,20 +28,14 @@ import { LinkedinIcon, InstagramIcon } from "@/components/icons";
 // import { Logo } from "@/components/icons";
 
 export const Navbar = () => {
-  const { theme } = useTheme(); // Track current theme (dark or light)
-  console.log("the theme", theme)
-  const [logos, setLogos] = useState<{
-    light: string | null;
-    dark: string | null;
-  }>({
-    light: null,
-    dark: null,
-  });
+  const { theme, toggleTheme } = useTheme(); // Track current theme (dark or light)
+  console.log("the theme is", theme)
+
+  const lightLogoSrc = "/logos/Evgenii_Logo_LightMode.png";
+  const darkLogoSrc = "/logos/Evgenii_Logo_DarkMode.png";
+
   const [loading, setLoading] = useState(true); // For initial loading state
   const [menuOpen, setMenuOpen] = useState(false); // Add state for menu toggle
-
-  // Define paths to the local logo images
-  const logoSrc = theme === "dark" ? "/logos/Evgenii_Logo_DarkMode.png" : "/logos/Evgenii_Logo_LightMode.png";
 
   // Fetch both logos on mount
   // useEffect(() => {
@@ -106,19 +100,10 @@ export const Navbar = () => {
     <NextUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
-          {/* <Link
-            className="flex justify-start items-center gap-1 pl-0 sm:pl-2 md:pl-4 lg:pl-6 hover:skew-x-6 hover:scale-125 transition-transform duration-500 ease-in-out"
-            color="foreground"
-            href="/"
-          >
-            {!loading && theme && logos[theme] && (
-              <img src={logos[theme]} alt="Site Logo" width="30" height="40" />
-            )}
-          </Link> */}
           <Link href="/">
-            <img src={logoSrc} alt="Evgenii.ca Logo" width="30" height="30" />
+            {/* Dynamically choose the logo based on the current theme */}
+            <img src={theme === "dark" ? darkLogoSrc : lightLogoSrc} alt="Evgenii.ca Logo" width="30" height="30" />
           </Link>
-            {/* {logoUrl && <img src={logoUrl} alt="Site Logo" width="40" height="50" />} */}
         </NavbarBrand>
         <div className="hidden md:flex gap-4 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
