@@ -11,11 +11,11 @@ function App() {
 
   return (
     <NextUIProvider navigate={navigate} useHref={useHref}>
-    <Routes>
-      <Route path="/" element={<IndexPage />} />
-      <Route path="/docs" element={<DocsPage />}  />
-      <Route path="/intro" element={<Intro />} />
-    </Routes>
+      <Routes>
+        <Route path="/" element={<IndexPage />} />
+        <Route path="/docs" element={<DocsPage />}  />
+        <Route path="/intro" element={<Intro />} />
+      </Routes>
     </NextUIProvider>
   );
 }
