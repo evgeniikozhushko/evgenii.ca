@@ -5,17 +5,22 @@ import {NextUIProvider} from '@nextui-org/react';
 import IndexPage from "@/pages/index";
 import DocsPage from "@/pages/docs";
 import Intro from "@/pages/intro";
+import { Provider } from "./provider";
 
 function App() {
   const navigate = useNavigate();
 
   return (
     <NextUIProvider navigate={navigate} useHref={useHref}>
-      <Routes>
+
+<Provider>
+<Routes>
         <Route path="/" element={<IndexPage />} />
         <Route path="/docs" element={<DocsPage />}  />
         <Route path="/intro" element={<Intro />} />
       </Routes>
+</Provider>
+      
     </NextUIProvider>
   );
 }

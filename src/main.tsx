@@ -12,9 +12,9 @@ document.documentElement.classList.add(storedTheme); // Apply the theme before R
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <Provider>
+      {/* <Provider> */}
         <App />
-      </Provider>
+      {/* </Provider> */}
     </BrowserRouter>
   </React.StrictMode>,
 );
