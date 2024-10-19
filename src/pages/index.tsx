@@ -159,7 +159,7 @@ export default function IndexPage() {
   return (
     <DefaultLayout>
       {/* Hero Section */}
-       <div className="flex flex-col items-start p-2 md:p-6 lg:p-2"> {/* md:p-8 */}
+       <div className="flex flex-col items-start p-2 pb-16 md:p-6 md:pt-8 md:pb-20 lg:p-2 lg:pt-8 lg:pb-20"> {/* md:p-8 /*/}
         <h1 className="text-3xl md:text-3xl lg:text-3xl font-extrabold leading-tight hover:skew-x-6 hover:scale-110 transition-transform duration-700 ease-in-out">
           evgenii.ca
         </h1>
