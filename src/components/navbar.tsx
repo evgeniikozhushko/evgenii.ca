@@ -26,6 +26,7 @@ import {
 } from "@/components/icons";
 import { LinkedinIcon, InstagramIcon } from "@/components/icons";
 // import { Logo } from "@/components/icons";
+import SliderBanner from "@/components/sliderBanner";
 
 export const Navbar = () => {
   const { theme, toggleTheme } = useTheme(); // Track current theme (dark or light)
@@ -97,6 +98,8 @@ export const Navbar = () => {
   );
 
   return (
+    <> 
+    {/* <SliderBanner /> */}
     <NextUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
@@ -190,5 +193,7 @@ export const Navbar = () => {
         </div>
       </NavbarMenu>
     </NextUINavbar>
+    </>
+    
   );
 };
