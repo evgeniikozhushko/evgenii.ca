@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import {BrowserRouter, useNavigate, useHref} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {NextUIProvider} from '@nextui-org/react';
 
 // Lazy load components
@@ -12,10 +12,9 @@ const Intro = React.lazy(() => import("@/pages/intro"));
 // import Intro from "@/pages/intro";
 
 function App() {
-  const navigate = useNavigate();
 
   return (
-    <NextUIProvider navigate={navigate} useHref={useHref}>
+    <NextUIProvider>
       <Routes>
         <Route path="/" element={<IndexPage />} />
         <Route path="/intro" element={<Intro />} />
