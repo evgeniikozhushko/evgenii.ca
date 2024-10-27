@@ -15,13 +15,13 @@ function App() {
   const navigate = useNavigate();
 
   return (
-    // <NextUIProvider navigate={navigate} useHref={useHref}>
+    <NextUIProvider navigate={navigate} useHref={useHref}>
       <Routes>
         <Route path="/" element={<IndexPage />} />
         <Route path="/intro" element={<Intro />} />
         {/* <Route path="/docs" element={<DocsPage />}  /> */}
       </Routes>
-    // </NextUIProvider>
+    </NextUIProvider>
   );
 }
 
