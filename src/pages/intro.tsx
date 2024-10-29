@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import DefaultLayout from "@/layouts/default";
 import { getAllPosts } from "@/contentful/core";
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer'; // Import for rendering rich text
-import { MARKS, BLOCKS, INLINES } from '@contentful/rich-text-types'; // Import for custom rendering
-
-
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer"; // Import for rendering rich text
+import { MARKS, BLOCKS, INLINES } from "@contentful/rich-text-types"; // Import for custom rendering
 
 export default function IntroPage() {
   const [introPost, setIntroPost] = useState<any>(null);
@@ -17,7 +15,9 @@ export default function IntroPage() {
         const blogData = await getAllPosts();
         if (blogData?.items?.length) {
           // Filter for the post with the title "Intro"
-          const intro = blogData.items.find((post: any) => post.fields.title === "Intro");
+          const intro = blogData.items.find(
+            (post: any) => post.fields.title === "Intro"
+          );
           if (intro) {
             setIntroPost(intro);
           } else {
@@ -97,11 +97,7 @@ export default function IntroPage() {
         {text
           .split("\n")
           .reduce((children: any, textSegment: any, index: any) => {
-            return [
-              ...children,
-              index > 0 && <br key={index} />,
-              textSegment,
-            ];
+            return [...children, index > 0 && <br key={index} />, textSegment];
           }, [])}
       </span>
     ),
@@ -126,11 +122,11 @@ export default function IntroPage() {
             )}
           </div>
         </div>
-
+        
         {/* Image Section */}
         {coverImage?.fields?.file?.url && (
           <div className="flex-1">
-            <img 
+            <img
               src={`https:${coverImage.fields.file.url}`}
               alt={title || "Hero Image"}
               className="w-full h-auto rounded-xl hover:skew-y-1 hover:scale-105 transition-transform duration-700 ease-in-out"

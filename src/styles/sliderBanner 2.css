@@ -1,0 +1,34 @@
+.announcement__slider {
+  position: relative;
+  width: 100vw; /* Full width of the viewport */
+  height: 30px; /* Adjust height */
+  overflow: hidden; /* Hide overflow */
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.announcement__wrapper {
+  display: flex;
+  white-space: nowrap;
+  animation: scroll-right 15000s linear infinite; /* Continuous scrolling */
+}
+
+.announcement__slide {
+  white-space: nowrap;
+  font-size: .75rem;
+  color: #1a1a1a;
+  padding-right: 4rem; /* Space between repeated text */
+}
+
+/* Keyframes for seamless left-to-right scrolling */
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-100%); /* Start off-screen to the left */
+  }
+  100% {
+    transform: translateX(100%); /* End fully off-screen to the right */
+  }
+}
+
