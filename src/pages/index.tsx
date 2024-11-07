@@ -106,38 +106,6 @@ export default function IndexPage() {
 
   if (!blogPosts.length) return <p>Loading...</p>;
 
-  // Handling Accordion Selection Changes
-  // const handleSelectionChange = (keys: string | Set<Key>) => {
-  //   const selectedKeys = typeof keys === "string" ? new Set([keys]) : keys;
-  //   if (selectedKeys.size > 0) {
-  //     const openKey = Array.from(selectedKeys)[0];
-  //     const openPost = blogPosts.find((post) => post.sys.id === openKey);
-  //     if (openPost) {
-  //       const imageUrl =
-  //         openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
-  //       setDisplayImage(imageUrl);
-  //     }
-  //   } else {
-  //     // All tabs are closed
-  //     setDisplayImage(null);
-  //   }
-  // };
-
-  // Handling Accordion Selection Changes
-  // const handleSelectionChange = (keys: Set<Key>) => {
-  //   if (keys.size > 0) {
-  //     const openKey = Array.from(keys)[0];
-  //     const openPost = blogPosts.find((post) => post.sys.id === openKey);
-  //     if (openPost) {
-  //       const imageUrl =
-  //         openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
-  //       setDisplayImage(imageUrl);
-  //     }
-  //   } else {
-  //     // All tabs are closed
-  //     setDisplayImage(null);
-  //   }
-  // };  
 
   const handleSelectionChange = (keys: Selection) => {
     // Convert keys to an array
