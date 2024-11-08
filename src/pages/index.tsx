@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
 // import { Key } from "react";
-import { Selection } from '@react-types/shared'; // Import the Selection type
+import { Selection } from "@react-types/shared"; // Import the Selection type
 
 export default function IndexPage() {
   const defaultContent =
@@ -17,6 +17,7 @@ export default function IndexPage() {
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
   // const [displayImage, setDisplayImage] = useState<string>(fallbackImage);
   const [displayImage, setDisplayImage] = useState<string | null>(null);
+  const [displayVideo, setDisplayVideo] = useState<string | null>(null);
 
   useEffect(() => {
     const getBlogData = async () => {
@@ -106,28 +107,33 @@ export default function IndexPage() {
 
   if (!blogPosts.length) return <p>Loading...</p>;
 
-
   const handleSelectionChange = (keys: Selection) => {
     // Convert keys to an array
     const selectedKeys = Array.from(keys);
-  
+
     if (selectedKeys.length > 0) {
       const openKey = selectedKeys[0]; // Assume the first selected key
       const openPost = blogPosts.find((post) => post.sys.id === openKey);
       if (openPost) {
-        const imageUrl = openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
+        const imageUrl =
+          openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
+        const videoUrl = openPost.fields.videoFile?.fields?.file?.url || null; // Fetch the video file URL if available
         setDisplayImage(imageUrl);
+        setDisplayVideo(videoUrl);
       }
     } else {
       // Handle the case where no keys are selected
       setDisplayImage(null);
+      setDisplayVideo(null);
     }
   };
 
   return (
     <DefaultLayout>
       {/* Hero Section */}
-       <div className="flex flex-col items-start p-2 pb-16 md:p-6 md:pt-8 md:pb-20 lg:p-2 lg:pt-8 lg:pb-20"> {/* md:p-8 /*/}
+      <div className="flex flex-col items-start p-2 pb-16 md:p-6 md:pt-8 md:pb-20 lg:p-2 lg:pt-8 lg:pb-20">
+        {" "}
+        {/* md:p-8 /*/}
         <h1 className="text-3xl md:text-3xl lg:text-3xl font-extrabold leading-tight hover:skew-x-6 hover:scale-110 transition-transform duration-700 ease-in-out">
           evgenii.ca
         </h1>
@@ -148,8 +154,6 @@ export default function IndexPage() {
             {blogPosts.map((post: any) => {
               // const imageUrl =
               //   post.fields.coverImage?.fields?.file?.url || fallbackImage;
-              // const title = post.fields.title;
-              // const postContent = post.fields.content;
               const title = post.fields.title;
               const postContent = post.fields.content;
               const key = post.sys.id;
@@ -193,6 +197,19 @@ export default function IndexPage() {
               alt="Project Image"
               src={displayImage}
             />
+          )}
+        </div>
+        {/* Video Display */}
+        <div
+          className={`flex w-full md:w-1/2 justify-end mt-8 md:mt-0 ${
+            displayVideo ? "" : "hidden"
+          }`}
+        >
+          {displayVideo && (
+            <video controls width="100%">
+              <source src={displayVideo} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           )}
         </div>
       </div>
