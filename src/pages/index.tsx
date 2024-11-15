@@ -5,8 +5,7 @@ import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
-// import { Key } from "react";
-import { Selection } from '@react-types/shared'; // Import the Selection type
+import { Selection } from "@react-types/shared"; // Import the Selection type
 
 export default function IndexPage() {
   const defaultContent =
@@ -15,8 +14,9 @@ export default function IndexPage() {
     "//images.ctfassets.net/vrssbejn74f5/1TddS8rtGvdvzXmvIzSnZU/4c436f876730492e22d6923d2d803ead/2023_BVCAS_blog.jpg";
 
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
-  // const [displayImage, setDisplayImage] = useState<string>(fallbackImage);
   const [displayImage, setDisplayImage] = useState<string | null>(null);
+  const [openKey, setOpenKey] = useState<string | null>(null);
+  const [displayVideo, setDisplayVideo] = useState<string | null>(null);
 
   useEffect(() => {
     const getBlogData = async () => {
@@ -106,85 +106,92 @@ export default function IndexPage() {
 
   if (!blogPosts.length) return <p>Loading...</p>;
 
-
   const handleSelectionChange = (keys: Selection) => {
     // Convert keys to an array
     const selectedKeys = Array.from(keys);
-  
+
     if (selectedKeys.length > 0) {
-      const openKey = selectedKeys[0]; // Assume the first selected key
-      const openPost = blogPosts.find((post) => post.sys.id === openKey);
+      const newOpenKey = selectedKeys[0]; // Assume the first selected key
+      setOpenKey(newOpenKey.toString());
+      const openPost = blogPosts.find((post) => post.sys.id === newOpenKey);
       if (openPost) {
-        const imageUrl = openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
+        const imageUrl =
+          openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
         setDisplayImage(imageUrl);
+        const videoUrl = openPost.fields.videoFile?.fields?.file?.url || null; // Fetch the video file URL if available
+        setDisplayVideo(videoUrl);
       }
     } else {
       // Handle the case where no keys are selected
+      setOpenKey(null);
       setDisplayImage(null);
+      setDisplayVideo(null);
     }
   };
 
   return (
     <DefaultLayout>
       {/* Hero Section */}
-       <div className="flex flex-col items-start p-2 pb-16 md:p-6 md:pt-8 md:pb-20 lg:p-2 lg:pt-8 lg:pb-20"> {/* md:p-8 /*/}
-        <h1 className="text-3xl md:text-3xl lg:text-3xl font-extrabold leading-tight hover:skew-x-6 hover:scale-110 transition-transform duration-700 ease-in-out">
+      <div className="flex flex-col items-start p-2 pb-16 md:p-6 md:pt-8 md:pb-20 lg:p-2 lg:pt-8 lg:pb-20">
+        {" "}
+        {/* md:p-8 /*/}
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight hover:skew-x-6 hover:scale-110 transition-transform duration-700 ease-in-out">
           evgenii.ca
         </h1>
-        <p className="text-md md:text-lg lg:text-lg font-extralight mt-2 md:mt-4 hover:skew-x-3 hover:scale-105 transition-transform duration-700 ease-in-out">
+        <p className="text-md md:text-lg lg:text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition-transform duration-700 ease-in-out">
           design + web development
         </p>
       </div>
 
       {/* Accordion and Image Section */}
       <div className="flex flex-col md:flex-row items-start p-0 md:p-4 lg:px-0 md:space-x-8">
-        {" "}
-        {/* Add className="prose" */}
+        {/* Accordion */}
         <div className="w-full md:w-1/2">
           <Accordion
             onSelectionChange={handleSelectionChange}
             selectionMode="single"
           >
             {blogPosts.map((post: any) => {
-              // const imageUrl =
-              //   post.fields.coverImage?.fields?.file?.url || fallbackImage;
-              // const title = post.fields.title;
-              // const postContent = post.fields.content;
               const title = post.fields.title;
               const postContent = post.fields.content;
               const key = post.sys.id;
 
               return (
                 <AccordionItem
-                  key={post.sys.id}
+                  key={key}
                   aria-label={title}
                   title={title}
-                  // onClick={() => setDisplayImage(imageUrl)}
+                  // Removed onClick handler
                 >
-                  {postContent
-                    ? renderPostContent(postContent)
-                    : defaultContent}
+                  {postContent ? renderPostContent(postContent) : defaultContent}
+                  {/* Image inside AccordionItem, shown on mobile */}
+                  {openKey === key && displayImage && (
+                    <div className="block md:hidden mt-4">
+                      <Image
+                        isZoomed
+                        width={"100%"}
+                        alt="Project Image"
+                        src={displayImage}
+                      />
+                    </div>
+                  )}
+                  {/* Video inside AccordionItem, shown on mobile */}
+                  {openKey === key && displayVideo && (
+                    <div className="block md:hidden mt-4">
+                      <video controls width="100%">
+                        <source src={displayVideo} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  )}
                 </AccordionItem>
               );
             })}
           </Accordion>
         </div>
-        {/* <div
-          className={`flex w-full md:w-1/2 justify-end mt-8 md:mt-0 ${
-            displayImage ? "" : "hidden"
-          }`}
-        >
-          <Image
-            isZoomed
-            width={"100%"}
-            alt="Project Image"
-            src={displayImage || fallbackImage} // Display the selected image
-          />
-        </div> */}
+        {/* Image Section outside Accordion, shown on desktop */}
         <div
-          className={`flex w-full md:w-1/2 justify-end mt-8 md:mt-0 ${
-            displayImage ? "" : "hidden"
-          }`}
+          className={`w-full md:w-1/2 mt-4 md:mt-0 flex justify-center hidden md:block`}
         >
           {displayImage && (
             <Image
@@ -194,44 +201,47 @@ export default function IndexPage() {
               src={displayImage}
             />
           )}
+          {/* Video outside Accordion, shown on desktop */}
+          {displayVideo && (
+            <video controls width="100%" className="mt-4">
+              <source src={displayVideo} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          )}
         </div>
       </div>
     </DefaultLayout>
   );
 }
 
-{
-  /* Large Format Image */
-}
-{
-  /* <div className="mt-8 w-full">
-            <Link to="/intro">
-              <img 
-                src={blogPosts[0].fields.coverImage?.fields?.file?.url}
-                alt="Hero Image" 
-                className="w-full h-auto rounded-xl hover:scale-105 transition-transform duration-700 ease-in-out"
-              />
-            </Link>
-          </div> */
-}
+/* Large Format Image */
+/* 
+<div className="mt-8 w-full">
+  <Link to="/intro">
+    <img 
+      src={blogPosts[0].fields.coverImage?.fields?.file?.url}
+      alt="Hero Image" 
+      className="w-full h-auto rounded-xl hover:scale-105 transition-transform duration-700 ease-in-out"
+    />
+  </Link>
+</div> 
+*/
 
-{
-  /* Card Section */
-}
-{
-  /* <div className="flex flex-wrap w-full h-auto rounded-xl my-8">
-        {blogPosts.map((post: any) => {
-          const imageUrl = post.fields.coverImage?.fields?.file?.url;
-          const title = post.fields.title;
+/* Card Section */
+/* 
+<div className="flex flex-wrap w-full h-auto rounded-xl my-8">
+  {blogPosts.map((post: any) => {
+    const imageUrl = post.fields.coverImage?.fields?.file?.url;
+    const title = post.fields.title;
 
-          return (
-            <Card
-              key={post.sys.id}
-              title={title}
-              imageUrl={imageUrl} // Pass the image URL
-              fixedImageUrl={post.fields.fixedImageUrl} // Provide a valid value for fixedImageUrl
-            />
-          );
-        })}
-      </div> */
-}
+    return (
+      <Card
+        key={post.sys.id}
+        title={title}
+        imageUrl={imageUrl} // Pass the image URL
+        fixedImageUrl={post.fields.fixedImageUrl} // Provide a valid value for fixedImageUrl
+      />
+    );
+  })}
+</div> 
+*/
