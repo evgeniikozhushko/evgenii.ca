@@ -11,7 +11,9 @@ const contentfulClient = createClient({
 // Fetch all posts - The Magic Function
 const getAllPosts = async () => {
   try {
-    return await contentfulClient.getEntries({ content_type: 'post' })
+    return await contentfulClient.getEntries({
+      content_type: 'post',
+    })
   }
   catch (error) {
     console.error('Error fetching data from Contentful', error)
