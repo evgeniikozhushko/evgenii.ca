@@ -166,7 +166,7 @@ export default function IndexPage() {
                   {postContent ? renderPostContent(postContent) : defaultContent}
                   {/* Image inside AccordionItem, shown on mobile */}
                   {openKey === key && displayImage && (
-                    <div className="block md:hidden mt-4">
+                    <div className="block md:hidden my-6">
                       <Image
                         isZoomed
                         width={"100%"}
@@ -191,7 +191,7 @@ export default function IndexPage() {
         </div>
         {/* Image Section outside Accordion, shown on desktop */}
         <div
-          className={`w-full md:w-1/2 mt-4 md:mt-0 flex justify-center hidden md:block`}
+          className={`w-full md:w-1/2 m-4 md:mt-0 flex justify-center hidden md:block`}
         >
           {displayImage && (
             <Image
