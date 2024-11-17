@@ -119,7 +119,6 @@ export default function IndexPage() {
           openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
         setDisplayImage(imageUrl);
         const videoUrl = openPost.fields.videoFile?.fields?.file?.url || null; // Fetch the video file URL if available
-        setDisplayImage(imageUrl);
         setDisplayVideo(videoUrl);
       }
     } else {
@@ -151,8 +150,8 @@ export default function IndexPage() {
           <Accordion
             onSelectionChange={handleSelectionChange}
             selectionMode="single"
-              // const imageUrl =
-              //   post.fields.coverImage?.fields?.file?.url || fallbackImage;
+          >
+            {blogPosts.map((post: any) => {
               const title = post.fields.title;
               const postContent = post.fields.content;
               const key = post.sys.id;
@@ -205,19 +204,6 @@ export default function IndexPage() {
           {/* Video outside Accordion, shown on desktop */}
           {displayVideo && (
             <video controls width="100%" className="mt-4">
-              <source src={displayVideo} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          )}
-        </div>
-        {/* Video Display */}
-        <div
-          className={`flex w-full md:w-1/2 justify-end mt-8 md:mt-0 ${
-            displayVideo ? "" : "hidden"
-          }`}
-        >
-          {displayVideo && (
-            <video controls width="100%">
               <source src={displayVideo} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
