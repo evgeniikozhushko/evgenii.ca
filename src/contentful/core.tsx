@@ -9,15 +9,23 @@ const contentfulClient = createClient({
 });
 
 // Fetch all posts - The Magic Function
-const getAllPosts = async () => {
+const getAllPosts = async (options = {}) => {
   try {
     return await contentfulClient.getEntries({
       content_type: 'post',
+      ...options // Allow passing any additional query parameters like order
     })
   }
   catch (error) {
     console.error('Error fetching data from Contentful', error)
   }
+}
+
+// Helper function to get posts in a specific order
+const getOrderedPosts = async (orderField = 'sys.createdAt', direction = 'desc') => {
+  return getAllPosts({
+    order: `${direction === 'desc' ? '-' : ''}${orderField}`
+  });
 }
 
 // Fetch light mode logo
@@ -87,4 +95,4 @@ const getAllPosts = async () => {
 //   }
 // };
 
-export { contentfulClient, getAllPosts }; // Subtracted because not fetching from Contentful - fetchLightLogo, fetchDarkLogo 
+export { contentfulClient, getAllPosts, getOrderedPosts }; // Subtracted because not fetching from Contentful - fetchLightLogo, fetchDarkLogo 

@@ -1,6 +1,6 @@
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer"; // Import rich text renderer
 import { MARKS, BLOCKS, INLINES } from "@contentful/rich-text-types"; // Import rich text types
-import { getAllPosts } from "@/contentful/core";
+import { getAllPosts, getOrderedPosts } from "@/contentful/core";
 import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
 import { Accordion, AccordionItem } from "@nextui-org/react";
@@ -20,14 +20,45 @@ export default function IndexPage() {
 
   useEffect(() => {
     const getBlogData = async () => {
-      const blogData = await getAllPosts();
-      console.log("Full Blog Data Response:", blogData); // Log full response
-      if (blogData) {
-        console.log("Fetched Blog Data:", blogData.items); // Log full structure
-        const filteredPosts = blogData.items.filter(
-          (post: any) => post.fields.title !== "Intro"
-        );
-        setBlogPosts(filteredPosts);
+      try {
+        // Try to fetch posts ordered by the number field (trying both lowercase and uppercase first letter)
+        // Contentful field names can sometimes be case-sensitive
+        let blogData = await getOrderedPosts('fields.number', 'desc');
+        
+        // If no data with lowercase 'number', try with capitalized 'Number'
+        if (!blogData || !blogData.items || blogData.items.length === 0) {
+          console.log("Trying with capitalized field name 'Number'");
+          blogData = await getOrderedPosts('fields.Number', 'desc');
+        }
+        
+        console.log("Full Blog Data Response:", blogData); // Log full response
+        
+        // If no data was returned or there was an error with both attempts
+        if (!blogData || !blogData.items || blogData.items.length === 0) {
+          console.warn("No posts returned when ordering by number field. Falling back to default ordering.");
+          // Fall back to default ordering by sys.updatedAt
+          const fallbackData = await getAllPosts();
+          if (fallbackData && fallbackData.items) {
+            const filteredPosts = fallbackData.items.filter(
+              (post: any) => post.fields.title !== "Intro"
+            );
+            setBlogPosts(filteredPosts);
+          } else {
+            console.error("Failed to fetch posts with fallback method as well.");
+            setBlogPosts([]); // Set empty array to clear loading state
+          }
+        } else {
+          // Process the successfully retrieved posts
+          const filteredPosts = blogData.items.filter(
+            (post: any) => post.fields.title !== "Intro"
+          );
+          console.log("Filtered posts:", filteredPosts);
+          setBlogPosts(filteredPosts);
+        }
+      } catch (error) {
+        console.error("Error fetching blog posts:", error);
+        // Handle error and clear loading state
+        setBlogPosts([]);
       }
     };
 
@@ -104,7 +135,24 @@ export default function IndexPage() {
     return <p>{defaultContent}</p>; // Fallback for no content
   };
 
-  if (!blogPosts.length) return <p>Loading...</p>;
+  // Loading and error states
+  if (!blogPosts.length) {
+    return (
+      <DefaultLayout>
+        <div className="p-8">
+          <h1 className="text-2xl font-bold mb-4">Status: Loading or No Posts Available</h1>
+          <p className="mb-4">This could be due to one of the following reasons:</p>
+          <ul className="list-disc ml-6 mb-4">
+            <li>Content is still loading from Contentful</li>
+            <li>No posts were found in your Contentful space</li>
+            <li>The field name 'number' might not match what's in your Contentful model</li>
+            <li>There was an error connecting to Contentful (check console for details)</li>
+          </ul>
+          <p>Please check your browser's console for more detailed error messages.</p>
+        </div>
+      </DefaultLayout>
+    );
+  }
 
   const handleSelectionChange = (keys: Selection) => {
     // Convert keys to an array

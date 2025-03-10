@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import DefaultLayout from "@/layouts/default";
-import { getAllPosts } from "@/contentful/core";
+import { getAllPosts, getOrderedPosts } from "@/contentful/core";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer"; // Import for rendering rich text
 import { MARKS, BLOCKS, INLINES } from "@contentful/rich-text-types"; // Import for custom rendering
 import { Button } from "@nextui-org/react";
@@ -122,7 +122,7 @@ export default function IntroPage() {
               <p>No content available</p>
             )}
           </div>
-          <Button
+          {/* <Button
             className="mt-8"
             as="a"
             href={introPost.fields.resume?.fields.file.url || "#"}
@@ -132,7 +132,7 @@ export default function IntroPage() {
             disabled={!introPost.fields.resume} // Disable if no resume
           >
             {introPost.fields.resume ? "Resume" : "Resume Unavailable"}
-          </Button>
+          </Button> */}
         </div>
 
         {/* Image Section */}
