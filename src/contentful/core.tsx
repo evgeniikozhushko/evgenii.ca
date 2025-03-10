@@ -22,9 +22,14 @@ const getAllPosts = async (options = {}) => {
 }
 
 // Helper function to get posts in a specific order
-const getOrderedPosts = async (orderField = 'sys.createdAt', direction = 'desc') => {
+const getOrderedPosts = async (orderField = 'sys.createdAt', direction = 'desc', limit = 100) => {
+  // Using multiple options to ensure proper ordering and limit cache issues
   return getAllPosts({
-    order: `${direction === 'desc' ? '-' : ''}${orderField}`
+    order: `${direction === 'desc' ? '-' : ''}${orderField}`,
+    limit: limit, // Fetch up to 100 entries by default
+    include: 2,   // Include 2 levels of linked entries
+    // Set to "skip: 0" ensures we always start from the beginning, which can help with cache issues
+    skip: 0
   });
 }
 

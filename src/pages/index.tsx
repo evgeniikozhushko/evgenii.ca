@@ -21,43 +21,72 @@ export default function IndexPage() {
   useEffect(() => {
     const getBlogData = async () => {
       try {
-        // Try to fetch posts ordered by the number field (trying both lowercase and uppercase first letter)
-        // Contentful field names can sometimes be case-sensitive
-        let blogData = await getOrderedPosts('fields.number', 'desc');
+        console.log("Attempting to fetch posts ordered by position field...");
+
+        // Approach 1: Try using the enhanced getOrderedPosts function
+        let blogData = await getOrderedPosts('fields.position', 'desc');
         
-        // If no data with lowercase 'number', try with capitalized 'Number'
+        // If that didn't work, try Approach 2: Direct ordering with getAllPosts
         if (!blogData || !blogData.items || blogData.items.length === 0) {
-          console.log("Trying with capitalized field name 'Number'");
-          blogData = await getOrderedPosts('fields.Number', 'desc');
+          console.log("First attempt failed. Trying direct ordering parameter...");
+          blogData = await getAllPosts({
+            order: '-fields.position'  // Descending order (minus sign)
+          });
         }
         
-        console.log("Full Blog Data Response:", blogData); // Log full response
-        
-        // If no data was returned or there was an error with both attempts
+        // If that still didn't work, try Approach 3: Try with capitalized field name
         if (!blogData || !blogData.items || blogData.items.length === 0) {
-          console.warn("No posts returned when ordering by number field. Falling back to default ordering.");
-          // Fall back to default ordering by sys.updatedAt
+          console.log("Second attempt failed. Trying with capitalized field name...");
+          blogData = await getAllPosts({
+            order: '-fields.Position'  // Try capitalized
+          });
+        }
+        
+        console.log("Blog Data Response:", blogData); // Log response
+        
+        if (!blogData || !blogData.items || blogData.items.length === 0) {
+          console.warn("All ordering attempts failed. Falling back to default ordering...");
+          // Fall back to default ordering
           const fallbackData = await getAllPosts();
+          
           if (fallbackData && fallbackData.items) {
             const filteredPosts = fallbackData.items.filter(
               (post: any) => post.fields.title !== "Intro"
             );
+            console.log("Using fallback ordering with filtered posts:", filteredPosts);
             setBlogPosts(filteredPosts);
           } else {
-            console.error("Failed to fetch posts with fallback method as well.");
-            setBlogPosts([]); // Set empty array to clear loading state
+            console.error("Failed to fetch posts with any method.");
+            setBlogPosts([]);
           }
         } else {
           // Process the successfully retrieved posts
-          const filteredPosts = blogData.items.filter(
+          let filteredPosts = blogData.items.filter(
             (post: any) => post.fields.title !== "Intro"
           );
-          console.log("Filtered posts:", filteredPosts);
+          
+          // Perform client-side sorting as an additional fallback
+          // This ensures order even if Contentful API doesn't respect the order parameter
+          try {
+            if (filteredPosts.length > 0 && 
+                filteredPosts[0].fields.position !== undefined) {
+              console.log("Performing additional client-side sorting by position field");
+              
+              filteredPosts.sort((a, b) => {
+                const posA = Number(a.fields.position) || 0;
+                const posB = Number(b.fields.position) || 0;
+                return posB - posA; // Descending order (higher numbers first)
+              });
+            }
+          } catch (sortError) {
+            console.warn("Could not perform client-side sorting:", sortError);
+          }
+          
+          console.log("Final filtered and sorted posts:", filteredPosts);
           setBlogPosts(filteredPosts);
         }
       } catch (error) {
         console.error("Error fetching blog posts:", error);
-        // Handle error and clear loading state
         setBlogPosts([]);
       }
     };
@@ -145,7 +174,7 @@ export default function IndexPage() {
           <ul className="list-disc ml-6 mb-4">
             <li>Content is still loading from Contentful</li>
             <li>No posts were found in your Contentful space</li>
-            <li>The field name 'number' might not match what's in your Contentful model</li>
+            <li>The field name 'position' might not match what's in your Contentful model</li>
             <li>There was an error connecting to Contentful (check console for details)</li>
           </ul>
           <p>Please check your browser's console for more detailed error messages.</p>
