@@ -3,7 +3,14 @@ import { MARKS, BLOCKS, INLINES } from "@contentful/rich-text-types"; // Import 
 import { getAllPosts, getOrderedPosts } from "@/contentful/core";
 import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
-import { Accordion, AccordionItem } from "@nextui-org/react";
+import {
+  Accordion,
+  AccordionItem,
+  Card,
+  CardHeader,
+  CardFooter,
+  Button,
+} from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
 import { Selection } from "@react-types/shared"; // Import the Selection type
 
@@ -24,36 +31,45 @@ export default function IndexPage() {
         console.log("Attempting to fetch posts ordered by position field...");
 
         // Approach 1: Try using the enhanced getOrderedPosts function
-        let blogData = await getOrderedPosts('fields.position', 'desc');
-        
+        let blogData = await getOrderedPosts("fields.position", "desc");
+
         // If that didn't work, try Approach 2: Direct ordering with getAllPosts
         if (!blogData || !blogData.items || blogData.items.length === 0) {
-          console.log("First attempt failed. Trying direct ordering parameter...");
+          console.log(
+            "First attempt failed. Trying direct ordering parameter..."
+          );
           blogData = await getAllPosts({
-            order: '-fields.position'  // Descending order (minus sign)
+            order: "-fields.position", // Descending order (minus sign)
           });
         }
-        
+
         // If that still didn't work, try Approach 3: Try with capitalized field name
         if (!blogData || !blogData.items || blogData.items.length === 0) {
-          console.log("Second attempt failed. Trying with capitalized field name...");
+          console.log(
+            "Second attempt failed. Trying with capitalized field name..."
+          );
           blogData = await getAllPosts({
-            order: '-fields.Position'  // Try capitalized
+            order: "-fields.Position", // Try capitalized
           });
         }
-        
+
         console.log("Blog Data Response:", blogData); // Log response
-        
+
         if (!blogData || !blogData.items || blogData.items.length === 0) {
-          console.warn("All ordering attempts failed. Falling back to default ordering...");
+          console.warn(
+            "All ordering attempts failed. Falling back to default ordering..."
+          );
           // Fall back to default ordering
           const fallbackData = await getAllPosts();
-          
+
           if (fallbackData && fallbackData.items) {
             const filteredPosts = fallbackData.items.filter(
               (post: any) => post.fields.title !== "Intro"
             );
-            console.log("Using fallback ordering with filtered posts:", filteredPosts);
+            console.log(
+              "Using fallback ordering with filtered posts:",
+              filteredPosts
+            );
             setBlogPosts(filteredPosts);
           } else {
             console.error("Failed to fetch posts with any method.");
@@ -64,14 +80,18 @@ export default function IndexPage() {
           let filteredPosts = blogData.items.filter(
             (post: any) => post.fields.title !== "Intro"
           );
-          
+
           // Perform client-side sorting as an additional fallback
           // This ensures order even if Contentful API doesn't respect the order parameter
           try {
-            if (filteredPosts.length > 0 && 
-                filteredPosts[0].fields.position !== undefined) {
-              console.log("Performing additional client-side sorting by position field");
-              
+            if (
+              filteredPosts.length > 0 &&
+              filteredPosts[0].fields.position !== undefined
+            ) {
+              console.log(
+                "Performing additional client-side sorting by position field"
+              );
+
               filteredPosts.sort((a, b) => {
                 const posA = Number(a.fields.position) || 0;
                 const posB = Number(b.fields.position) || 0;
@@ -81,7 +101,7 @@ export default function IndexPage() {
           } catch (sortError) {
             console.warn("Could not perform client-side sorting:", sortError);
           }
-          
+
           console.log("Final filtered and sorted posts:", filteredPosts);
           setBlogPosts(filteredPosts);
         }
@@ -169,15 +189,28 @@ export default function IndexPage() {
     return (
       <DefaultLayout>
         <div className="p-8">
-          <h1 className="text-2xl font-bold mb-4">Status: Loading or No Posts Available</h1>
-          <p className="mb-4">This could be due to one of the following reasons:</p>
+          <h1 className="text-2xl font-bold mb-4">
+            Status: Loading or No Posts Available
+          </h1>
+          <p className="mb-4">
+            This could be due to one of the following reasons:
+          </p>
           <ul className="list-disc ml-6 mb-4">
             <li>Content is still loading from Contentful</li>
             <li>No posts were found in your Contentful space</li>
-            <li>The field name 'position' might not match what's in your Contentful model</li>
-            <li>There was an error connecting to Contentful (check console for details)</li>
+            <li>
+              The field name 'position' might not match what's in your
+              Contentful model
+            </li>
+            <li>
+              There was an error connecting to Contentful (check console for
+              details)
+            </li>
           </ul>
-          <p>Please check your browser's console for more detailed error messages.</p>
+          <p>
+            Please check your browser's console for more detailed error
+            messages.
+          </p>
         </div>
       </DefaultLayout>
     );
@@ -220,6 +253,128 @@ export default function IndexPage() {
         </p>
       </div>
 
+      {/* HeroUI Card-CoverImage */}
+      <div className="max-w-[900px] gap-2 grid grid-cols-12 grid-rows-2 px-8">
+
+        {/* HeroUI Card-CoverImage 1*/}
+        <Card className="col-span-12 sm:col-span-4 h-[300px]">
+          <CardHeader className="absolute z-10 top-1 flex-col !items-start">
+            <p className="text-tiny text-white/60 uppercase font-bold">
+              Hello
+            </p>
+            <h4 className="text-white font-medium text-large">
+              Stream the Acme event
+            </h4>
+          </CardHeader>
+          <Image
+            removeWrapper
+            alt="Card background"
+            className="z-0 w-full h-full object-cover"
+            src="https://heroui.com/images/card-example-4.jpeg"
+          />
+        </Card>
+
+        {/* HeroUI Card-CoverImage 2 */}
+        <Card className="col-span-12 sm:col-span-4 h-[300px]">
+          <CardHeader className="absolute z-10 top-1 flex-col !items-start">
+            <p className="text-tiny text-white/60 uppercase font-bold">
+              Plant a tree
+            </p>
+            <h4 className="text-white font-medium text-large">
+              Contribute to the planet
+            </h4>
+          </CardHeader>
+          <Image
+            removeWrapper
+            alt="Card background"
+            className="z-0 w-full h-full object-cover"
+            src="https://heroui.com/images/card-example-3.jpeg"
+          />
+        </Card>
+        <Card className="col-span-12 sm:col-span-4 h-[300px]">
+          <CardHeader className="absolute z-10 top-1 flex-col !items-start">
+            <p className="text-tiny text-white/60 uppercase font-bold">
+              Supercharged
+            </p>
+            <h4 className="text-white font-medium text-large">
+              Creates beauty like a beast
+            </h4>
+          </CardHeader>
+          <Image
+            removeWrapper
+            alt="Card background"
+            className="z-0 w-full h-full object-cover"
+            src="https://heroui.com/images/card-example-2.jpeg"
+          />
+        </Card>
+        <Card
+          isFooterBlurred
+          className="w-full h-[300px] col-span-12 sm:col-span-5"
+        >
+          <CardHeader className="absolute z-10 top-1 flex-col items-start">
+            <p className="text-tiny text-white/60 uppercase font-bold">New</p>
+            <h4 className="text-black font-medium text-2xl">Acme camera</h4>
+          </CardHeader>
+          <Image
+            removeWrapper
+            alt="Card example background"
+            className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
+            src="https://heroui.com/images/card-example-6.jpeg"
+          />
+          <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+            <div>
+              <p className="text-black text-tiny">Available soon.</p>
+              <p className="text-black text-tiny">Get notified.</p>
+            </div>
+            <Button
+              className="text-tiny"
+              color="primary"
+              radius="full"
+              size="sm"
+            >
+              Notify Me
+            </Button>
+          </CardFooter>
+        </Card>
+        <Card
+          isFooterBlurred
+          className="w-full h-[300px] col-span-12 sm:col-span-7"
+        >
+          <CardHeader className="absolute z-10 top-1 flex-col items-start">
+            <p className="text-tiny text-white/60 uppercase font-bold">
+              Your day your way
+            </p>
+            <h4 className="text-white/90 font-medium text-xl">
+              Your checklist for better sleep
+            </h4>
+          </CardHeader>
+          <Image
+            removeWrapper
+            alt="Relaxing app background"
+            className="z-0 w-full h-full object-cover"
+            src="https://heroui.com/images/card-example-5.jpeg"
+          />
+          <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
+            <div className="flex flex-grow gap-2 items-center">
+              <Image
+                alt="Breathing app icon"
+                className="rounded-full w-10 h-11 bg-black"
+                src="https://heroui.com/images/breathing-app-icon.jpeg"
+              />
+              <div className="flex flex-col">
+                <p className="text-tiny text-white/60">Breathing App</p>
+                <p className="text-tiny text-white/60">
+                  Get a good night&#39;s sleep.
+                </p>
+              </div>
+            </div>
+            <Button radius="full" size="sm">
+              Get App
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+
       {/* Accordion and Image Section */}
       <div className="flex flex-col md:flex-row items-start p-4 md:p-4 lg:px-4 md:space-x-8">
         {/* Accordion */}
@@ -240,7 +395,9 @@ export default function IndexPage() {
                   title={title}
                   // Removed onClick handler
                 >
-                  {postContent ? renderPostContent(postContent) : defaultContent}
+                  {postContent
+                    ? renderPostContent(postContent)
+                    : defaultContent}
                   {/* Image inside AccordionItem, shown on mobile */}
                   {openKey === key && displayImage && (
                     <div className="block md:hidden my-6">
