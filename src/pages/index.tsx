@@ -32,7 +32,7 @@ export default function IndexPage() {
 
         // Approach 1: Try using the enhanced getOrderedPosts function
         let blogData = await getOrderedPosts("fields.position", "desc");
-
+        
         // If that didn't work, try Approach 2: Direct ordering with getAllPosts
         if (!blogData || !blogData.items || blogData.items.length === 0) {
           console.log(
@@ -42,7 +42,7 @@ export default function IndexPage() {
             order: "-fields.position", // Descending order (minus sign)
           });
         }
-
+        
         // If that still didn't work, try Approach 3: Try with capitalized field name
         if (!blogData || !blogData.items || blogData.items.length === 0) {
           console.log(
@@ -52,16 +52,16 @@ export default function IndexPage() {
             order: "-fields.Position", // Try capitalized
           });
         }
-
+        
         console.log("Blog Data Response:", blogData); // Log response
-
+        
         if (!blogData || !blogData.items || blogData.items.length === 0) {
           console.warn(
             "All ordering attempts failed. Falling back to default ordering..."
           );
           // Fall back to default ordering
           const fallbackData = await getAllPosts();
-
+          
           if (fallbackData && fallbackData.items) {
             const filteredPosts = fallbackData.items.filter(
               (post: any) => post.fields.title !== "Intro"
@@ -80,9 +80,9 @@ export default function IndexPage() {
           let filteredPosts = blogData.items.filter(
             (post: any) => post.fields.title !== "Intro"
           );
-
-          // Perform client-side sorting as an additional fallback
+          
           // This ensures order even if Contentful API doesn't respect the order parameter
+          // Perform client-side sorting as an additional fallback
           try {
             if (
               filteredPosts.length > 0 &&
@@ -91,7 +91,7 @@ export default function IndexPage() {
               console.log(
                 "Performing additional client-side sorting by position field"
               );
-
+              
               filteredPosts.sort((a, b) => {
                 const posA = Number(a.fields.position) || 0;
                 const posB = Number(b.fields.position) || 0;
@@ -101,7 +101,7 @@ export default function IndexPage() {
           } catch (sortError) {
             console.warn("Could not perform client-side sorting:", sortError);
           }
-
+          
           console.log("Final filtered and sorted posts:", filteredPosts);
           setBlogPosts(filteredPosts);
         }
@@ -113,6 +113,14 @@ export default function IndexPage() {
 
     getBlogData(); // Call the async function
   }, []);
+
+  // Debug effect to log posts when they change
+  useEffect(() => {
+    console.log('Current blog posts:', blogPosts);
+    blogPosts.forEach((post, index) => {
+      console.log(`Post ${index} title:`, post.fields.title);
+    });
+  }, [blogPosts]);
 
   // Function to render rich text content from Contentful
   const renderPostContent = (content: any) => {
@@ -254,130 +262,81 @@ export default function IndexPage() {
       </div>
 
       {/* HeroUI Card-CoverImage */}
-      <div className="max-w-[900px] gap-2 grid grid-cols-12 grid-rows-2 px-8">
+      <div className="max-w-[900px] gap-4 grid grid-cols-12 grid-rows-2 px-8 mx-auto">
 
-        {/* HeroUI Card-CoverImage 1*/}
-        <Card className="col-span-12 sm:col-span-4 h-[300px]">
-          <CardHeader className="absolute z-10 top-1 flex-col !items-start">
-            <p className="text-tiny text-white/60 uppercase font-bold">
-              Hello
-            </p>
-            <h4 className="text-white font-medium text-large">
-              Stream the Acme event
-            </h4>
-          </CardHeader>
-          <Image
-            removeWrapper
-            alt="Card background"
-            className="z-0 w-full h-full object-cover"
-            src="https://heroui.com/images/card-example-4.jpeg"
-          />
-        </Card>
+        {/* Top row - three equal cards */}
+        {blogPosts.slice(0, 3).map((post: any) => {
+          const title = post.fields.title;
+          const imageUrl =
+            post.fields.coverImage?.fields?.file?.url || fallbackImage;
+          const key = post.sys.id;
 
-        {/* HeroUI Card-CoverImage 2 */}
-        <Card className="col-span-12 sm:col-span-4 h-[300px]">
-          <CardHeader className="absolute z-10 top-1 flex-col !items-start">
-            <p className="text-tiny text-white/60 uppercase font-bold">
-              Plant a tree
-            </p>
-            <h4 className="text-white font-medium text-large">
-              Contribute to the planet
-            </h4>
-          </CardHeader>
-          <Image
-            removeWrapper
-            alt="Card background"
-            className="z-0 w-full h-full object-cover"
-            src="https://heroui.com/images/card-example-3.jpeg"
-          />
-        </Card>
-        <Card className="col-span-12 sm:col-span-4 h-[300px]">
-          <CardHeader className="absolute z-10 top-1 flex-col !items-start">
-            <p className="text-tiny text-white/60 uppercase font-bold">
-              Supercharged
-            </p>
-            <h4 className="text-white font-medium text-large">
-              Creates beauty like a beast
-            </h4>
-          </CardHeader>
-          <Image
-            removeWrapper
-            alt="Card background"
-            className="z-0 w-full h-full object-cover"
-            src="https://heroui.com/images/card-example-2.jpeg"
-          />
-        </Card>
-        <Card
-          isFooterBlurred
-          className="w-full h-[300px] col-span-12 sm:col-span-5"
-        >
-          <CardHeader className="absolute z-10 top-1 flex-col items-start">
-            <p className="text-tiny text-white/60 uppercase font-bold">New</p>
-            <h4 className="text-black font-medium text-2xl">Acme camera</h4>
-          </CardHeader>
-          <Image
-            removeWrapper
-            alt="Card example background"
-            className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
-            src="https://heroui.com/images/card-example-6.jpeg"
-          />
-          <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
-            <div>
-              <p className="text-black text-tiny">Available soon.</p>
-              <p className="text-black text-tiny">Get notified.</p>
-            </div>
-            <Button
-              className="text-tiny"
-              color="primary"
-              radius="full"
-              size="sm"
-            >
-              Notify Me
-            </Button>
-          </CardFooter>
-        </Card>
-        <Card
-          isFooterBlurred
-          className="w-full h-[300px] col-span-12 sm:col-span-7"
-        >
-          <CardHeader className="absolute z-10 top-1 flex-col items-start">
-            <p className="text-tiny text-white/60 uppercase font-bold">
-              Your day your way
-            </p>
-            <h4 className="text-white/90 font-medium text-xl">
-              Your checklist for better sleep
-            </h4>
-          </CardHeader>
-          <Image
-            removeWrapper
-            alt="Relaxing app background"
-            className="z-0 w-full h-full object-cover"
-            src="https://heroui.com/images/card-example-5.jpeg"
-          />
-          <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
-            <div className="flex flex-grow gap-2 items-center">
+          return (
+            <Card key={key} className="col-span-12 sm:col-span-4 h-[300px]">
+              <CardHeader className="absolute z-10 top-1 flex-col !items-start">
+                <h6 className="text-black font-medium text-large">{title}</h6>
+              </CardHeader>
               <Image
-                alt="Breathing app icon"
-                className="rounded-full w-10 h-11 bg-black"
-                src="https://heroui.com/images/breathing-app-icon.jpeg"
+                removeWrapper
+                alt={title}
+                className="z-0 w-full h-full object-cover"
+                src={`https:${imageUrl}`}
               />
-              <div className="flex flex-col">
-                <p className="text-tiny text-white/60">Breathing App</p>
-                <p className="text-tiny text-white/60">
-                  Get a good night&#39;s sleep.
-                </p>
-              </div>
-            </div>
-            <Button radius="full" size="sm">
-              Get App
-            </Button>
-          </CardFooter>
-        </Card>
+            </Card>
+          );
+        })}
+
+        {/* Bottom row - two differently sized cards */}
+        {blogPosts.slice(3, 5).map((post: any, index: number) => {
+          const title = post.fields.title;
+          const imageUrl =
+            post.fields.coverImage?.fields?.file?.url || fallbackImage;
+          const key = post.sys.id;
+          const isWide = index === 1; // Second card is wider
+
+          return (
+            <Card
+              key={key}
+              isFooterBlurred
+              className={`w-full h-[300px] col-span-12 sm:col-span-${isWide ? "7" : "5"}`}
+            >
+              <CardHeader className="absolute z-10 top-1 flex-col items-start">
+                <h6 className="text-black font-medium text-large">
+                  {title}
+                </h6>
+              </CardHeader>
+              <Image
+                removeWrapper
+                alt={title}
+                className="z-0 w-full h-full object-cover"
+                src={`https:${imageUrl}`}
+              />
+              <CardFooter
+                className={`absolute ${isWide ? "bg-black/40" : "bg-white/30"} bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between`}
+              >
+                <div>
+                  <p
+                    className={`text-tiny ${isWide ? "text-white/60" : "text-black"}`}
+                  >
+                    {post.fields.description || "Learn more"}
+                  </p>
+                </div>
+                <Button
+                  className="text-tiny"
+                  color="primary"
+                  radius="full"
+                  size="sm"
+                >
+                  View
+                </Button>
+              </CardFooter>
+            </Card>
+          );
+        })}
       </div>
 
-      {/* Accordion and Image Section */}
+      {/* Accordion and Image Section - Temporarily Disabled
       <div className="flex flex-col md:flex-row items-start p-4 md:p-4 lg:px-4 md:space-x-8">
-        {/* Accordion */}
         <div className="w-full md:w-1/2">
           <Accordion
             onSelectionChange={handleSelectionChange}
@@ -393,12 +352,10 @@ export default function IndexPage() {
                   key={key}
                   aria-label={title}
                   title={title}
-                  // Removed onClick handler
                 >
                   {postContent
                     ? renderPostContent(postContent)
                     : defaultContent}
-                  {/* Image inside AccordionItem, shown on mobile */}
                   {openKey === key && displayImage && (
                     <div className="block md:hidden my-6">
                       <Image
@@ -409,7 +366,6 @@ export default function IndexPage() {
                       />
                     </div>
                   )}
-                  {/* Video inside AccordionItem, shown on mobile */}
                   {openKey === key && displayVideo && (
                     <div className="block md:hidden mt-4">
                       <video controls width="100%">
@@ -423,7 +379,6 @@ export default function IndexPage() {
             })}
           </Accordion>
         </div>
-        {/* Image Section outside Accordion, shown on desktop */}
         <div
           className={`w-full md:w-1/2 m-4 md:mt-0 flex justify-center hidden md:block`}
         >
@@ -435,7 +390,6 @@ export default function IndexPage() {
               src={displayImage}
             />
           )}
-          {/* Video outside Accordion, shown on desktop */}
           {displayVideo && (
             <video controls width="100%" className="mt-4">
               <source src={displayVideo} type="video/mp4" />
@@ -444,6 +398,7 @@ export default function IndexPage() {
           )}
         </div>
       </div>
+      */}
     </DefaultLayout>
   );
 }
