@@ -4,6 +4,7 @@ import { getAllPosts, getOrderedPosts } from "@/contentful/core";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer"; // Import for rendering rich text
 import { MARKS, BLOCKS, INLINES } from "@contentful/rich-text-types"; // Import for custom rendering
 import { Button } from "@nextui-org/react";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 
 export default function IntroPage() {
   const [introPost, setIntroPost] = useState<any>(null);
@@ -40,8 +41,21 @@ export default function IntroPage() {
     fetchIntroPost(); // Call the async function
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>; // Display any errors
+  if (loading) return (
+    <AuroraBackground>
+      <DefaultLayout>
+        <p className="p-8 dark:text-white">Loading...</p>
+      </DefaultLayout>
+    </AuroraBackground>
+  );
+  
+  if (error) return (
+    <AuroraBackground>
+      <DefaultLayout>
+        <p className="p-8 dark:text-white">{error}</p>
+      </DefaultLayout>
+    </AuroraBackground>
+  ); // Display any errors
 
   // Extract content from the intro post
   const { title, coverImage, content } = introPost.fields;
@@ -66,19 +80,19 @@ export default function IntroPage() {
         />
       ),
       [BLOCKS.PARAGRAPH]: (_node: any, children: any) => (
-        <p className="whitespace-pre-wrap">{children}</p>
+        <p className="whitespace-pre-wrap dark:text-gray-200">{children}</p>
       ),
       [BLOCKS.UL_LIST]: (_node: any, children: any) => (
-        <ul className="list-disc pl-5">{children}</ul>
+        <ul className="list-disc pl-5 dark:text-gray-200">{children}</ul>
       ),
       [BLOCKS.OL_LIST]: (_node: any, children: any) => (
-        <ol className="list-decimal pl-5">{children}</ol>
+        <ol className="list-decimal pl-5 dark:text-gray-200">{children}</ol>
       ),
       [BLOCKS.LIST_ITEM]: (_node: any, children: any) => (
-        <li className="mb-2">{children}</li>
+        <li className="mb-2 dark:text-gray-200">{children}</li>
       ),
       [BLOCKS.QUOTE]: (_node: any, children: any) => (
-        <blockquote className="border-l-4 border-gray-300 pl-4 text-gray-600 italic">
+        <blockquote className="border-l-4 border-gray-300 pl-4 text-gray-600 dark:text-gray-400 italic">
           {children}
         </blockquote>
       ),
@@ -87,7 +101,7 @@ export default function IntroPage() {
           href={node.data.uri}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 underline hover:text-blue-800 hover:no-underline"
+          className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300 hover:no-underline"
         >
           {children}
         </a>
@@ -105,47 +119,49 @@ export default function IntroPage() {
   };
 
   return (
-    <DefaultLayout>
-      {/* Hero Section */}
-      <div className="flex flex-col lg:flex-row items-start p-4 gap-8">
-        {/* Text Section */}
-        <div className="flex-1">
-          <h1 className="text-2xl md:text-2xl lg:text-2xl font-extrabold leading-tight hover:skew-y-1 hover:scale-105 transition-transform duration-700 ease-in-out">
-            {title || "Intro Title"}
-          </h1>
-
-          {/* Description Section */}
-          <div className="text-base md:text-base lg:text-base font-extralight mt-4 pr-0 md:pr-20 custom-rich-text">
-            {content ? (
-              documentToReactComponents(content, contentfulOptions) // Render rich text content
-            ) : (
-              <p>No content available</p>
-            )}
-          </div>
-          {/* <Button
-            className="mt-8"
-            as="a"
-            href={introPost.fields.resume?.fields.file.url || "#"}
-            download
-            target="_blank"
-            rel="noopener noreferrer"
-            disabled={!introPost.fields.resume} // Disable if no resume
-          >
-            {introPost.fields.resume ? "Resume" : "Resume Unavailable"}
-          </Button> */}
-        </div>
-
-        {/* Image Section */}
-        {coverImage?.fields?.file?.url && (
+    <AuroraBackground>
+      <DefaultLayout>
+        {/* Hero Section */}
+        <div className="flex flex-col lg:flex-row items-start p-4 gap-8">
+          {/* Text Section */}
           <div className="flex-1">
-            <img
-              src={`https:${coverImage.fields.file.url}`}
-              alt={title || "Hero Image"}
-              className="w-full h-auto rounded-xl hover:skew-y-1 hover:scale-105 transition-transform duration-700 ease-in-out"
-            />
+            <h1 className="text-2xl md:text-2xl lg:text-2xl font-extrabold leading-tight hover:skew-y-1 hover:scale-105 transition-transform duration-700 ease-in-out dark:text-white">
+              {title || "Intro Title"}
+            </h1>
+
+            {/* Description Section */}
+            <div className="text-base md:text-base lg:text-base font-extralight mt-4 pr-0 md:pr-20 custom-rich-text dark:text-gray-200">
+              {content ? (
+                documentToReactComponents(content, contentfulOptions) // Render rich text content
+              ) : (
+                <p className="dark:text-gray-200">No content available</p>
+              )}
+            </div>
+            {/* <Button
+              className="mt-8"
+              as="a"
+              href={introPost.fields.resume?.fields.file.url || "#"}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              disabled={!introPost.fields.resume} // Disable if no resume
+            >
+              {introPost.fields.resume ? "Resume" : "Resume Unavailable"}
+            </Button> */}
           </div>
-        )}
-      </div>
-    </DefaultLayout>
+
+          {/* Image Section */}
+          {coverImage?.fields?.file?.url && (
+            <div className="flex-1">
+              <img
+                src={`https:${coverImage.fields.file.url}`}
+                alt={title || "Hero Image"}
+                className="w-full h-auto rounded-xl hover:skew-y-1 hover:scale-105 transition-transform duration-700 ease-in-out"
+              />
+            </div>
+          )}
+        </div>
+      </DefaultLayout>
+    </AuroraBackground>
   );
 }

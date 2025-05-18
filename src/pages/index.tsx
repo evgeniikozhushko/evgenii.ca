@@ -118,19 +118,19 @@ export default function IndexPage() {
             />
           ),
           [BLOCKS.PARAGRAPH]: (_node: any, children: any) => (
-            <p className="whitespace-pre-wrap">{children}</p>
+            <p className="whitespace-pre-wrap dark:text-gray-200">{children}</p>
           ),
           [BLOCKS.UL_LIST]: (_node: any, children: any) => (
-            <ul className="list-upper-roman pl-5">{children}</ul>
+            <ul className="list-upper-roman pl-5 dark:text-gray-200">{children}</ul>
           ),
           [BLOCKS.OL_LIST]: (_node: any, children: any) => (
-            <ol className="list-decimal pl-5">{children}</ol>
+            <ol className="list-decimal pl-5 dark:text-gray-200">{children}</ol>
           ),
           [BLOCKS.LIST_ITEM]: (_node: any, children: any) => (
-            <li className="mb-2">{children}</li>
+            <li className="mb-2 dark:text-gray-200">{children}</li>
           ),
           [BLOCKS.QUOTE]: (_node: any, children: any) => (
-            <blockquote className="border-l-4 border-gray-300 pl-4 text-gray-600 italic">
+            <blockquote className="border-l-4 border-gray-300 pl-4 text-gray-600 dark:text-gray-400 italic">
               {children}
             </blockquote>
           ),
@@ -139,7 +139,7 @@ export default function IndexPage() {
               href={node.data.uri}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 underline hover:text-blue-800 hover:no-underline"
+              className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300 hover:no-underline"
             >
               {children}
             </a>
@@ -169,15 +169,15 @@ export default function IndexPage() {
     return (
       <DefaultLayout>
         <div className="p-8">
-          <h1 className="text-2xl font-bold mb-4">Status: Loading or No Posts Available</h1>
-          <p className="mb-4">This could be due to one of the following reasons:</p>
-          <ul className="list-disc ml-6 mb-4">
+          <h1 className="text-2xl font-bold mb-4 dark:text-white">Status: Loading or No Posts Available</h1>
+          <p className="mb-4 dark:text-gray-200">This could be due to one of the following reasons:</p>
+          <ul className="list-disc ml-6 mb-4 dark:text-gray-200">
             <li>Content is still loading from Contentful</li>
             <li>No posts were found in your Contentful space</li>
             <li>The field name 'position' might not match what's in your Contentful model</li>
             <li>There was an error connecting to Contentful (check console for details)</li>
           </ul>
-          <p>Please check your browser's console for more detailed error messages.</p>
+          <p className="dark:text-gray-200">Please check your browser's console for more detailed error messages.</p>
         </div>
       </DefaultLayout>
     );
@@ -212,10 +212,10 @@ export default function IndexPage() {
       <div className="flex flex-col items-start p-6 pb-16 md:p-6 md:pt-8 md:pb-20 lg:p-6 lg:pt-8 lg:pb-20">
         {" "}
         {/* md:p-8 /*/}
-        <h1 className="text-3xl md:text-3xl lg:text-3xl font-extrabold leading-tight hover:skew-x-6 hover:scale-110 transition-transform duration-700 ease-in-out">
+        <h1 className="text-3xl md:text-3xl lg:text-3xl font-extrabold leading-tight hover:skew-x-6 hover:scale-110 transition-transform duration-700 ease-in-out dark:text-white">
           evgenii.ca
         </h1>
-        <p className="text-md md:text-lg lg:text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition-transform duration-700 ease-in-out">
+        <p className="text-md md:text-lg lg:text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition-transform duration-700 ease-in-out dark:text-gray-200">
           design + web development
         </p>
       </div>
@@ -227,6 +227,7 @@ export default function IndexPage() {
           <Accordion
             onSelectionChange={handleSelectionChange}
             selectionMode="single"
+            className="dark:text-white"
           >
             {blogPosts.map((post: any) => {
               const title = post.fields.title;
@@ -238,9 +239,12 @@ export default function IndexPage() {
                   key={key}
                   aria-label={title}
                   title={title}
+                  className="dark:text-white"
                   // Removed onClick handler
                 >
-                  {postContent ? renderPostContent(postContent) : defaultContent}
+                  <div className="dark:text-gray-200">
+                    {postContent ? renderPostContent(postContent) : defaultContent}
+                  </div>
                   {/* Image inside AccordionItem, shown on mobile */}
                   {openKey === key && displayImage && (
                     <div className="block md:hidden my-6">

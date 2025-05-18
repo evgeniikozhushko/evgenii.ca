@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --white: rgba(255, 255, 255, 1);
+    --black: rgba(0, 0, 0, 1);
+    --transparent: transparent;
+    --blue-300: rgba(147, 197, 253, 1);
+    --blue-400: rgba(96, 165, 250, 1);
+    --blue-500: rgba(59, 130, 246, 1);
+    --indigo-300: rgba(165, 180, 252, 1);
+    --violet-200: rgba(221, 214, 254, 1);
+  }
+}
+
 /* Custom Rich Text Styling - converted css rules */
 /* .custom-rich-text {
   @apply whitespace-pre-wrap;
