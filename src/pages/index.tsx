@@ -32,7 +32,7 @@ export default function IndexPage() {
 
         // Approach 1: Try using the enhanced getOrderedPosts function
         let blogData = await getOrderedPosts("fields.position", "desc");
-        
+
         // If that didn't work, try Approach 2: Direct ordering with getAllPosts
         if (!blogData || !blogData.items || blogData.items.length === 0) {
           console.log(
@@ -42,7 +42,7 @@ export default function IndexPage() {
             order: "-fields.position", // Descending order (minus sign)
           });
         }
-        
+
         // If that still didn't work, try Approach 3: Try with capitalized field name
         if (!blogData || !blogData.items || blogData.items.length === 0) {
           console.log(
@@ -52,16 +52,16 @@ export default function IndexPage() {
             order: "-fields.Position", // Try capitalized
           });
         }
-        
+
         console.log("Blog Data Response:", blogData); // Log response
-        
+
         if (!blogData || !blogData.items || blogData.items.length === 0) {
           console.warn(
             "All ordering attempts failed. Falling back to default ordering..."
           );
           // Fall back to default ordering
           const fallbackData = await getAllPosts();
-          
+
           if (fallbackData && fallbackData.items) {
             const filteredPosts = fallbackData.items.filter(
               (post: any) => post.fields.title !== "Intro"
@@ -80,7 +80,7 @@ export default function IndexPage() {
           let filteredPosts = blogData.items.filter(
             (post: any) => post.fields.title !== "Intro"
           );
-          
+
           // This ensures order even if Contentful API doesn't respect the order parameter
           // Perform client-side sorting as an additional fallback
           try {
@@ -91,7 +91,7 @@ export default function IndexPage() {
               console.log(
                 "Performing additional client-side sorting by position field"
               );
-              
+
               filteredPosts.sort((a, b) => {
                 const posA = Number(a.fields.position) || 0;
                 const posB = Number(b.fields.position) || 0;
@@ -101,7 +101,7 @@ export default function IndexPage() {
           } catch (sortError) {
             console.warn("Could not perform client-side sorting:", sortError);
           }
-          
+
           console.log("Final filtered and sorted posts:", filteredPosts);
           setBlogPosts(filteredPosts);
         }
@@ -116,9 +116,11 @@ export default function IndexPage() {
 
   // Debug effect to log posts when they change
   useEffect(() => {
-    console.log('Current blog posts:', blogPosts);
+    console.log("Current blog posts:", blogPosts);
     blogPosts.forEach((post, index) => {
       console.log(`Post ${index} title:`, post.fields.title);
+      console.log(`Post ${index} fields:`, post.fields);
+      console.log(`Post ${index} type:`, post.fields.type);
     });
   }, [blogPosts]);
 
@@ -263,9 +265,9 @@ export default function IndexPage() {
 
       {/* HeroUI Card-CoverImage */}
       <div className="max-w-[900px] gap-4 grid grid-cols-12 grid-rows-2 px-8 mx-auto">
-
         {/* Top row - three equal cards */}
         {blogPosts.slice(0, 3).map((post: any) => {
+          const postType = post.fields.type || 'Default Type';
           const title = post.fields.title;
           const imageUrl =
             post.fields.coverImage?.fields?.file?.url || fallbackImage;
@@ -274,7 +276,12 @@ export default function IndexPage() {
           return (
             <Card key={key} className="col-span-12 sm:col-span-4 h-[300px]">
               <CardHeader className="absolute z-10 top-1 flex-col !items-start">
-                <h6 className="text-black font-medium text-large">{title}</h6>
+                <h6 className="text-gray-500 font-medium text-xs uppercase">
+                  {postType}
+                </h6>
+                <h6 className="text-black font-medium text-large">
+                  {title}
+                </h6>
               </CardHeader>
               <Image
                 removeWrapper
@@ -288,6 +295,7 @@ export default function IndexPage() {
 
         {/* Bottom row - two differently sized cards */}
         {blogPosts.slice(3, 5).map((post: any, index: number) => {
+          const postType = post.fields.type || 'Default Type';
           const title = post.fields.title;
           const imageUrl =
             post.fields.coverImage?.fields?.file?.url || fallbackImage;
@@ -301,6 +309,9 @@ export default function IndexPage() {
               className={`w-full h-[300px] col-span-12 sm:col-span-${isWide ? "7" : "5"}`}
             >
               <CardHeader className="absolute z-10 top-1 flex-col items-start">
+                <h6 className="text-gray-500 font-medium text-xs uppercase">
+                  {postType}
+                </h6>
                 <h6 className="text-black font-medium text-large">
                   {title}
                 </h6>
