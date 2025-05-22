@@ -4,8 +4,10 @@ import { getAllPosts, getOrderedPosts } from "@/contentful/core";
 import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
 import { Card, CardHeader, Image } from "@nextui-org/react";
+import PostModal from "@/components/PostModal";
 
 export default function IndexPage() {
+  const [selectedPost, setSelectedPost] = useState<any | null>(null);
   const fallbackImage =
     "//images.ctfassets.net/vrssbejn74f5/1TddS8rtGvdvzXmvIzSnZU/4c436f876730492e22d6923d2d803ead/2023_BVCAS_blog.jpg";
 
@@ -58,7 +60,7 @@ export default function IndexPage() {
       </div>
 
       {/* Posts Grid with pattern 3-2-2 */}
-      <div className="grid grid-cols-12 gap-4 max-w-[900px] mx-auto px-8">
+      <div className="grid grid-cols-12 gap-4 max-w-[900px] mx-auto mb-16 px-8">
         {rows().map((row, rowIdx) =>
           row.map((post: any, colIdx: number) => {
             const title = post.fields.title || "Untitled";
@@ -77,7 +79,13 @@ export default function IndexPage() {
             const imageUrl = url ? `https:${url}` : fallbackImage;
 
             return (
-              <Card key={post.sys.id} className={`${span} h-[300px] bg-white relative`}>                
+              <Card
+                key={post.sys.id}
+                isPressable
+                onPress={() => setSelectedPost(post)}
+                // className={`${span} h-[300px] bg-white relative`}
+                className={`${span} h-[300px] bg-white relative`}
+              >
                 {/* Image behind header */}
                 <Image
                   removeWrapper
@@ -100,6 +108,11 @@ export default function IndexPage() {
           })
         )}
       </div>
+      <PostModal
+        post={selectedPost}
+        open={!!selectedPost}
+        onClose={() => setSelectedPost(null)}
+      />
     </DefaultLayout>
   );
 }
