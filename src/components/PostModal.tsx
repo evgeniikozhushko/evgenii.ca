@@ -1,4 +1,4 @@
-import { Modal, Button, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
+import { Modal, Button, ModalContent, ModalHeader, ModalBody, ModalFooter, Link } from "@nextui-org/react";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { MARKS, BLOCKS, INLINES } from "@contentful/rich-text-types";
 import { Image } from "@nextui-org/react";
@@ -26,9 +26,9 @@ const PostModal: FC<PostModalProps> = ({ post, open, onClose }) => {
       renderNode: {
         [BLOCKS.PARAGRAPH]: (_: any, children: any) => <p>{children}</p>,
         [INLINES.HYPERLINK]: (node: any, children: any) => (
-          <a href={node.data.uri} target="_blank" rel="noopener noreferrer">
+          <Link isExternal href={node.data.uri} className="pointer-events-auto">
             {children}
-          </a>
+          </Link>
         ),
       },
     };
@@ -36,23 +36,23 @@ const PostModal: FC<PostModalProps> = ({ post, open, onClose }) => {
   };
 
   return (
-    <Modal isOpen={open} onClose={onClose} size="lg">
+    <Modal isOpen={open} onClose={onClose} size="2xl" style={{ top: '5vh', position: 'absolute' }}>
       <ModalContent>
         <ModalHeader>
-          <h3 className="text-xl font-semibold">{title}</h3>
+      <h3 className="text-xl font-semibold">{title}</h3>
         </ModalHeader>
         <ModalBody>
-          {imageUrl && (
-            <Image src={imageUrl} alt={title} width="100%" className="mb-4" />
-          )}
-          {content && content.nodeType === "document"
-            ? renderContent(content)
+        {imageUrl && (
+          <Image src={imageUrl} alt={title} width="100%" className="mb-4" />
+        )}
+        {content && content.nodeType === "document"
+          ? renderContent(content)
             : <p>No additional content.</p>}
         </ModalBody>
         <ModalFooter>
           <Button onPress={onClose}>
-            Close
-          </Button>
+          Close
+        </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
