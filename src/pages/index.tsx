@@ -5,6 +5,7 @@ import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
 import { Card, CardHeader, Image } from "@nextui-org/react";
 import PostModal from "@/components/PostModal";
+import ShinyText from './ShinyText';
 
 export default function IndexPage() {
   const [selectedPost, setSelectedPost] = useState<any | null>(null);
