@@ -5,24 +5,32 @@ import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
 import { Card, CardHeader, Image } from "@nextui-org/react";
 import PostModal from "@/components/PostModal";
-import ShinyText from './ShinyText';
+// import ShinyText from "./ShinyText";
 
 export default function IndexPage() {
-  const [selectedPost, setSelectedPost] = useState<any | null>(null);
+  const [blogPosts, setBlogPosts] = useState<any[]>([]);
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const fallbackImage =
     "//images.ctfassets.net/vrssbejn74f5/1TddS8rtGvdvzXmvIzSnZU/4c436f876730492e22d6923d2d803ead/2023_BVCAS_blog.jpg";
 
-  const [blogPosts, setBlogPosts] = useState<any[]>([]);
+  // derive the post you're on
+  const selectedPost = selectedPostId ? blogPosts.find(p => p.sys.id === selectedPostId) : null;
+  const selectedIndex = selectedPost ? blogPosts.findIndex(p => p.sys.id === selectedPostId) : -1;
 
   useEffect(() => {
     const load = async () => {
       try {
         let data = await getOrderedPosts("fields.position", "desc");
-        if (!data?.items?.length) data = await getAllPosts({ order: "-fields.position" });
-        if (!data?.items?.length) data = await getAllPosts({ order: "-fields.Position" });
+        if (!data?.items?.length)
+          data = await getAllPosts({ order: "-fields.position" });
+        if (!data?.items?.length)
+          data = await getAllPosts({ order: "-fields.Position" });
         const items = data?.items || [];
         const filtered = items.filter((p: any) => p.fields.title !== "Intro");
-        filtered.sort((a: any, b: any) => (b.fields.position || 0) - (a.fields.position || 0));
+        filtered.sort(
+          (a: any, b: any) =>
+            (b.fields.position || 0) - (a.fields.position || 0)
+        );
         setBlogPosts(filtered);
       } catch (e) {
         console.error(e);
@@ -36,7 +44,8 @@ export default function IndexPage() {
   const rows = (): any[][] => {
     const sizes = [3, 2, 2];
     const out: any[][] = [];
-    let i = 0, ri = 0;
+    let i = 0,
+      ri = 0;
     while (i < blogPosts.length) {
       const n = sizes[ri % sizes.length];
       out.push(blogPosts.slice(i, i + n));
@@ -72,8 +81,11 @@ export default function IndexPage() {
             if (row.length === 3) span = "col-span-12 sm:col-span-4";
             else if (row.length === 2) {
               const smallFirst = rowIdx % 3 === 1;
-              const isSmall = (colIdx === 0 && smallFirst) || (colIdx === 1 && !smallFirst);
-              span = isSmall ? "col-span-12 sm:col-span-5" : "col-span-12 sm:col-span-7";
+              const isSmall =
+                (colIdx === 0 && smallFirst) || (colIdx === 1 && !smallFirst);
+              span = isSmall
+                ? "col-span-12 sm:col-span-5"
+                : "col-span-12 sm:col-span-7";
             }
 
             const url = post.fields.coverImage?.fields?.file?.url;
@@ -83,8 +95,7 @@ export default function IndexPage() {
               <Card
                 key={post.sys.id}
                 isPressable
-                onPress={() => setSelectedPost(post)}
-                // className={`${span} h-[300px] bg-white relative`}
+                onPress={() => setSelectedPostId(post.sys.id)}
                 className={`${span} h-[300px] bg-white relative`}
               >
                 {/* Image behind header */}
@@ -100,9 +111,7 @@ export default function IndexPage() {
                   <h6 className="text-gray-500 font-medium text-xs uppercase">
                     {postType}
                   </h6>
-                  <h6 className="text-black font-medium text-lg">
-                    {title}
-                  </h6>
+                  <h6 className="text-black font-medium text-lg">{title}</h6>
                 </CardHeader>
               </Card>
             );
@@ -112,7 +121,17 @@ export default function IndexPage() {
       <PostModal
         post={selectedPost}
         open={!!selectedPost}
-        onClose={() => setSelectedPost(null)}
+        onClose={() => setSelectedPostId(null)}
+        onBack={() => {
+          if (selectedIndex > 0) {
+            setSelectedPostId(blogPosts[selectedIndex - 1].sys.id);
+          }
+        }}
+        onNext={() => {
+          if (selectedIndex < blogPosts.length - 1) {
+            setSelectedPostId(blogPosts[selectedIndex + 1].sys.id);
+          }
+        }}
       />
     </DefaultLayout>
   );
