@@ -66,7 +66,19 @@ export default function IndexPage() {
   return (
     <DefaultLayout>
       {/* Hero */}
-      <div className=" mx-auto w-full" style={{ position: "relative", height: "300px" }}>
+      <div
+        className="
+          relative
+    w-full
+    max-w-[900px]
+    mx-auto
+    px-4       /* mobile: 1rem on each side */
+    sm:px-8    /* tablet+ (min-640px): 2rem on each side */
+    h-[200px]
+    sm:h-[350px]
+    md:h-[400px]
+      "
+      >
         <TextPressure
           text="Hello!"
           flex={true}
@@ -80,19 +92,19 @@ export default function IndexPage() {
           minFontSize={36}
         />
       </div>
-      <div className="flex flex-col items-start p-6 pb-16">
-        {/* <h1 className="text-3xl font-extrabold hover:skew-x-6 hover:scale-110 transition duration-700">
+      {/* <div className="flex flex-col items-start p-6 pb-16">
+        <h1 className="text-3xl font-extrabold hover:skew-x-6 hover:scale-110 transition duration-700">
           evgenii.ca
-        </h1> */}
-        {/* <p className="text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition duration-700">
+        </h1>
+        <p className="text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition duration-700">
           design + web development
-        </p> */}
-        {/* <ShinyText
+        </p>
+        <ShinyText
           text="design & web development"
           speed={3} // 3-second shine cycle
           className="text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition duration-700"
-        /> */}
-      </div>
+        />
+      </div> */}
 
       {/* Posts Grid with pattern 3-2-2 */}
       <div className="grid grid-cols-12 gap-4 max-w-[900px] mx-auto mb-16 px-8">
