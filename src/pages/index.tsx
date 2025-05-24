@@ -5,7 +5,9 @@ import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
 import { Card, CardHeader, Image } from "@nextui-org/react";
 import PostModal from "@/components/PostModal";
-// import ShinyText from "./ShinyText";
+import ShinyText from "@/components/ShinyText";
+import "@/styles/ShinyText.css";
+import TextPressure from "@/components/TextPressure";
 
 export default function IndexPage() {
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
@@ -14,8 +16,12 @@ export default function IndexPage() {
     "//images.ctfassets.net/vrssbejn74f5/1TddS8rtGvdvzXmvIzSnZU/4c436f876730492e22d6923d2d803ead/2023_BVCAS_blog.jpg";
 
   // derive the post you're on
-  const selectedPost = selectedPostId ? blogPosts.find(p => p.sys.id === selectedPostId) : null;
-  const selectedIndex = selectedPost ? blogPosts.findIndex(p => p.sys.id === selectedPostId) : -1;
+  const selectedPost = selectedPostId
+    ? blogPosts.find((p) => p.sys.id === selectedPostId)
+    : null;
+  const selectedIndex = selectedPost
+    ? blogPosts.findIndex((p) => p.sys.id === selectedPostId)
+    : -1;
 
   useEffect(() => {
     const load = async () => {
@@ -60,13 +66,32 @@ export default function IndexPage() {
   return (
     <DefaultLayout>
       {/* Hero */}
+      <div className=" mx-auto w-full" style={{ position: "relative", height: "300px" }}>
+        <TextPressure
+          text="Hello!"
+          flex={true}
+          alpha={false}
+          stroke={false}
+          width={true}
+          weight={true}
+          italic={true}
+          textColor="#ffffff"
+          strokeColor="#ff0000"
+          minFontSize={36}
+        />
+      </div>
       <div className="flex flex-col items-start p-6 pb-16">
-        <h1 className="text-3xl font-extrabold hover:skew-x-6 hover:scale-110 transition duration-700">
+        {/* <h1 className="text-3xl font-extrabold hover:skew-x-6 hover:scale-110 transition duration-700">
           evgenii.ca
-        </h1>
-        <p className="text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition duration-700">
+        </h1> */}
+        {/* <p className="text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition duration-700">
           design + web development
-        </p>
+        </p> */}
+        {/* <ShinyText
+          text="design & web development"
+          speed={3} // 3-second shine cycle
+          className="text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition duration-700"
+        /> */}
       </div>
 
       {/* Posts Grid with pattern 3-2-2 */}
