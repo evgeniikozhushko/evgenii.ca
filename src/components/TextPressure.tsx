@@ -28,7 +28,7 @@ const TextPressure: React.FC<TextPressureProps> = ({
   flex = true,
   stroke = false,
   scale = false,
-  textColor = "#FFFFFF",
+  textColor = "#000000",
   strokeColor = "#FF0000",
   className = "",
   minFontSize = 24,
@@ -158,7 +158,7 @@ const TextPressure: React.FC<TextPressureProps> = ({
     return () => cancelAnimationFrame(rafId);
   }, [width, weight, italic, alpha, chars.length]);
 
-  // Use namespaced classes so Tailwind’s .flex/.stroke stay untouched
+  // Use namespaced classes so Tailwind's .flex/.stroke stay untouched
   const dynamicClassName = [
     className,
     flex ? "text-pressure__flex" : "",
@@ -184,7 +184,7 @@ const TextPressure: React.FC<TextPressureProps> = ({
           font-style: normal;
         }
 
-        /* our flex layout, not Tailwind’s */
+        /* our flex layout, not Tailwind's */
         .text-pressure__flex {
           display: flex;
           justify-content: space-between;

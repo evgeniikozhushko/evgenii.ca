@@ -87,7 +87,7 @@ export default function IndexPage() {
           width={true}
           weight={true}
           italic={true}
-          textColor="#ffffff"
+          textColor="var(--nextui-colors-foreground)"
           strokeColor="#ff0000"
           minFontSize={36}
         />
