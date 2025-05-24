@@ -3,322 +3,173 @@ import { MARKS, BLOCKS, INLINES } from "@contentful/rich-text-types"; // Import 
 import { getAllPosts, getOrderedPosts } from "@/contentful/core";
 import DefaultLayout from "@/layouts/default";
 import { useEffect, useState } from "react";
-import { Accordion, AccordionItem } from "@nextui-org/react";
-import { Image } from "@nextui-org/react";
-import { Selection } from "@react-types/shared"; // Import the Selection type
+import { Card, CardHeader, Image } from "@nextui-org/react";
+import PostModal from "@/components/PostModal";
+import ShinyText from "@/components/ShinyText";
+import "@/styles/ShinyText.css";
+import TextPressure from "@/components/TextPressure";
 
 export default function IndexPage() {
-  const defaultContent =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+  const [blogPosts, setBlogPosts] = useState<any[]>([]);
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const fallbackImage =
     "//images.ctfassets.net/vrssbejn74f5/1TddS8rtGvdvzXmvIzSnZU/4c436f876730492e22d6923d2d803ead/2023_BVCAS_blog.jpg";
 
-  const [blogPosts, setBlogPosts] = useState<any[]>([]);
-  const [displayImage, setDisplayImage] = useState<string | null>(null);
-  const [openKey, setOpenKey] = useState<string | null>(null);
-  const [displayVideo, setDisplayVideo] = useState<string | null>(null);
+  // derive the post you're on
+  const selectedPost = selectedPostId
+    ? blogPosts.find((p) => p.sys.id === selectedPostId)
+    : null;
+  const selectedIndex = selectedPost
+    ? blogPosts.findIndex((p) => p.sys.id === selectedPostId)
+    : -1;
 
   useEffect(() => {
-    const getBlogData = async () => {
+    const load = async () => {
       try {
-        console.log("Attempting to fetch posts ordered by position field...");
-
-        // Approach 1: Try using the enhanced getOrderedPosts function
-        let blogData = await getOrderedPosts('fields.position', 'desc');
-        
-        // If that didn't work, try Approach 2: Direct ordering with getAllPosts
-        if (!blogData || !blogData.items || blogData.items.length === 0) {
-          console.log("First attempt failed. Trying direct ordering parameter...");
-          blogData = await getAllPosts({
-            order: '-fields.position'  // Descending order (minus sign)
-          });
-        }
-        
-        // If that still didn't work, try Approach 3: Try with capitalized field name
-        if (!blogData || !blogData.items || blogData.items.length === 0) {
-          console.log("Second attempt failed. Trying with capitalized field name...");
-          blogData = await getAllPosts({
-            order: '-fields.Position'  // Try capitalized
-          });
-        }
-        
-        console.log("Blog Data Response:", blogData); // Log response
-        
-        if (!blogData || !blogData.items || blogData.items.length === 0) {
-          console.warn("All ordering attempts failed. Falling back to default ordering...");
-          // Fall back to default ordering
-          const fallbackData = await getAllPosts();
-          
-          if (fallbackData && fallbackData.items) {
-            const filteredPosts = fallbackData.items.filter(
-              (post: any) => post.fields.title !== "Intro"
-            );
-            console.log("Using fallback ordering with filtered posts:", filteredPosts);
-            setBlogPosts(filteredPosts);
-          } else {
-            console.error("Failed to fetch posts with any method.");
-            setBlogPosts([]);
-          }
-        } else {
-          // Process the successfully retrieved posts
-          let filteredPosts = blogData.items.filter(
-            (post: any) => post.fields.title !== "Intro"
-          );
-          
-          // Perform client-side sorting as an additional fallback
-          // This ensures order even if Contentful API doesn't respect the order parameter
-          try {
-            if (filteredPosts.length > 0 && 
-                filteredPosts[0].fields.position !== undefined) {
-              console.log("Performing additional client-side sorting by position field");
-              
-              filteredPosts.sort((a, b) => {
-                const posA = Number(a.fields.position) || 0;
-                const posB = Number(b.fields.position) || 0;
-                return posB - posA; // Descending order (higher numbers first)
-              });
-            }
-          } catch (sortError) {
-            console.warn("Could not perform client-side sorting:", sortError);
-          }
-          
-          console.log("Final filtered and sorted posts:", filteredPosts);
-          setBlogPosts(filteredPosts);
-        }
-      } catch (error) {
-        console.error("Error fetching blog posts:", error);
+        let data = await getOrderedPosts("fields.position", "desc");
+        if (!data?.items?.length)
+          data = await getAllPosts({ order: "-fields.position" });
+        if (!data?.items?.length)
+          data = await getAllPosts({ order: "-fields.Position" });
+        const items = data?.items || [];
+        const filtered = items.filter((p: any) => p.fields.title !== "Intro");
+        filtered.sort(
+          (a: any, b: any) =>
+            (b.fields.position || 0) - (a.fields.position || 0)
+        );
+        setBlogPosts(filtered);
+      } catch (e) {
+        console.error(e);
         setBlogPosts([]);
       }
     };
-
-    getBlogData(); // Call the async function
+    load();
   }, []);
 
-  // Function to render rich text content from Contentful
-  const renderPostContent = (content: any) => {
-    console.log("logging content", content);
-    if (content && content.nodeType === "document") {
-      // Ensure it's valid rich text
-      const contentfulOptions = {
-        renderMark: {
-          [MARKS.CODE]: (embedded: any) => (
-            <span className="code-block-wrapper">
-              <span className="relative-parent">
-                <span dangerouslySetInnerHTML={{ __html: embedded }} />
-              </span>
-            </span>
-          ),
-        },
-        renderNode: {
-          "embedded-asset-block": (node: any) => (
-            <img
-              className="max-w-full h-auto my-5" // Adjusted for responsiveness
-              src={node.data.target.fields.file.url}
-              alt={node.data.target.fields.title || "Image"}
-            />
-          ),
-          [BLOCKS.PARAGRAPH]: (_node: any, children: any) => (
-            <p className="whitespace-pre-wrap">{children}</p>
-          ),
-          [BLOCKS.UL_LIST]: (_node: any, children: any) => (
-            <ul className="list-upper-roman pl-5">{children}</ul>
-          ),
-          [BLOCKS.OL_LIST]: (_node: any, children: any) => (
-            <ol className="list-decimal pl-5">{children}</ol>
-          ),
-          [BLOCKS.LIST_ITEM]: (_node: any, children: any) => (
-            <li className="mb-2">{children}</li>
-          ),
-          [BLOCKS.QUOTE]: (_node: any, children: any) => (
-            <blockquote className="border-l-4 border-gray-300 pl-4 text-gray-600 italic">
-              {children}
-            </blockquote>
-          ),
-          [INLINES.HYPERLINK]: (node: any, children: any) => (
-            <a
-              href={node.data.uri}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 underline hover:text-blue-800 hover:no-underline"
-            >
-              {children}
-            </a>
-          ),
-        },
-        renderText: (text: any) => (
-          <span style={{ whiteSpace: "pre-wrap" }}>
-            {text
-              .split("\n")
-              .reduce((children: any, textSegment: any, index: any) => {
-                return [
-                  ...children,
-                  index > 0 && <br key={index} />,
-                  textSegment,
-                ];
-              }, [])}
-          </span>
-        ),
-      };
-      return documentToReactComponents(content, contentfulOptions); // Apply rich text rendering
+  // Chunk rows by sizes 3,2,2
+  const rows = (): any[][] => {
+    const sizes = [3, 2, 2];
+    const out: any[][] = [];
+    let i = 0,
+      ri = 0;
+    while (i < blogPosts.length) {
+      const n = sizes[ri % sizes.length];
+      out.push(blogPosts.slice(i, i + n));
+      i += n;
+      ri++;
     }
-    return <p>{defaultContent}</p>; // Fallback for no content
+    return out;
   };
 
-  // Loading and error states
-  if (!blogPosts.length) {
-    return (
-      <DefaultLayout>
-        <div className="p-8">
-          <h1 className="text-2xl font-bold mb-4">Status: Loading or No Posts Available</h1>
-          <p className="mb-4">This could be due to one of the following reasons:</p>
-          <ul className="list-disc ml-6 mb-4">
-            <li>Content is still loading from Contentful</li>
-            <li>No posts were found in your Contentful space</li>
-            <li>The field name 'position' might not match what's in your Contentful model</li>
-            <li>There was an error connecting to Contentful (check console for details)</li>
-          </ul>
-          <p>Please check your browser's console for more detailed error messages.</p>
-        </div>
-      </DefaultLayout>
-    );
-  }
-
-  const handleSelectionChange = (keys: Selection) => {
-    // Convert keys to an array
-    const selectedKeys = Array.from(keys);
-
-    if (selectedKeys.length > 0) {
-      const newOpenKey = selectedKeys[0]; // Assume the first selected key
-      setOpenKey(newOpenKey.toString());
-      const openPost = blogPosts.find((post) => post.sys.id === newOpenKey);
-      if (openPost) {
-        const imageUrl =
-          openPost.fields.coverImage?.fields?.file?.url || fallbackImage;
-        setDisplayImage(imageUrl);
-        const videoUrl = openPost.fields.videoFile?.fields?.file?.url || null; // Fetch the video file URL if available
-        setDisplayVideo(videoUrl);
-      }
-    } else {
-      // Handle the case where no keys are selected
-      setOpenKey(null);
-      setDisplayImage(null);
-      setDisplayVideo(null);
-    }
-  };
+  if (!blogPosts.length) return <p>Loading...</p>;
 
   return (
     <DefaultLayout>
-      {/* Hero Section */}
-      <div className="flex flex-col items-start p-6 pb-16 md:p-6 md:pt-8 md:pb-20 lg:p-6 lg:pt-8 lg:pb-20">
-        {" "}
-        {/* md:p-8 /*/}
-        <h1 className="text-3xl md:text-3xl lg:text-3xl font-extrabold leading-tight hover:skew-x-6 hover:scale-110 transition-transform duration-700 ease-in-out">
+      {/* Hero */}
+      <div
+        className="
+          relative
+    w-full
+    max-w-[900px]
+    mx-auto
+    px-4       /* mobile: 1rem on each side */
+    sm:px-8    /* tablet+ (min-640px): 2rem on each side */
+    h-[200px]
+    sm:h-[350px]
+    md:h-[400px]
+      "
+      >
+        <TextPressure
+          text="Hello!"
+          flex={true}
+          alpha={false}
+          stroke={false}
+          width={true}
+          weight={true}
+          italic={true}
+          textColor="#ffffff"
+          strokeColor="#ff0000"
+          minFontSize={36}
+        />
+      </div>
+      {/* <div className="flex flex-col items-start p-6 pb-16">
+        <h1 className="text-3xl font-extrabold hover:skew-x-6 hover:scale-110 transition duration-700">
           evgenii.ca
         </h1>
-        <p className="text-md md:text-lg lg:text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition-transform duration-700 ease-in-out">
+        <p className="text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition duration-700">
           design + web development
         </p>
-      </div>
+        <ShinyText
+          text="design & web development"
+          speed={3} // 3-second shine cycle
+          className="text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition duration-700"
+        />
+      </div> */}
 
-      {/* Accordion and Image Section */}
-      <div className="flex flex-col md:flex-row items-start p-4 md:p-4 lg:px-4 md:space-x-8">
-        {/* Accordion */}
-        <div className="w-full md:w-1/2">
-          <Accordion
-            onSelectionChange={handleSelectionChange}
-            selectionMode="single"
-          >
-            {blogPosts.map((post: any) => {
-              const title = post.fields.title;
-              const postContent = post.fields.content;
-              const key = post.sys.id;
+      {/* Posts Grid with pattern 3-2-2 */}
+      <div className="grid grid-cols-12 gap-4 max-w-[900px] mx-auto mb-16 px-8">
+        {rows().map((row, rowIdx) =>
+          row.map((post: any, colIdx: number) => {
+            const title = post.fields.title || "Untitled";
+            const postType = post.fields.postType || "Type";
 
-              return (
-                <AccordionItem
-                  key={key}
-                  aria-label={title}
-                  title={title}
-                  // Removed onClick handler
-                >
-                  {postContent ? renderPostContent(postContent) : defaultContent}
-                  {/* Image inside AccordionItem, shown on mobile */}
-                  {openKey === key && displayImage && (
-                    <div className="block md:hidden my-6">
-                      <Image
-                        isZoomed
-                        width={"100%"}
-                        alt="Project Image"
-                        src={displayImage}
-                      />
-                    </div>
-                  )}
-                  {/* Video inside AccordionItem, shown on mobile */}
-                  {openKey === key && displayVideo && (
-                    <div className="block md:hidden mt-4">
-                      <video controls width="100%">
-                        <source src={displayVideo} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </div>
-                  )}
-                </AccordionItem>
-              );
-            })}
-          </Accordion>
-        </div>
-        {/* Image Section outside Accordion, shown on desktop */}
-        <div
-          className={`w-full md:w-1/2 m-4 md:mt-0 flex justify-center hidden md:block`}
-        >
-          {displayImage && (
-            <Image
-              isZoomed
-              width={"100%"}
-              alt="Project Image"
-              src={displayImage}
-            />
-          )}
-          {/* Video outside Accordion, shown on desktop */}
-          {displayVideo && (
-            <video controls width="100%" className="mt-4">
-              <source src={displayVideo} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          )}
-        </div>
+            // Compute grid span: full width on mobile, responsive on sm+
+            let span = "col-span-12";
+            if (row.length === 3) span = "col-span-12 sm:col-span-4";
+            else if (row.length === 2) {
+              const smallFirst = rowIdx % 3 === 1;
+              const isSmall =
+                (colIdx === 0 && smallFirst) || (colIdx === 1 && !smallFirst);
+              span = isSmall
+                ? "col-span-12 sm:col-span-5"
+                : "col-span-12 sm:col-span-7";
+            }
+
+            const url = post.fields.coverImage?.fields?.file?.url;
+            const imageUrl = url ? `https:${url}` : fallbackImage;
+
+            return (
+              <Card
+                key={post.sys.id}
+                isPressable
+                onPress={() => setSelectedPostId(post.sys.id)}
+                className={`${span} h-[300px] bg-white relative`}
+              >
+                {/* Image behind header */}
+                <Image
+                  removeWrapper
+                  alt={title}
+                  className="absolute inset-0 w-full h-full object-scale-down z-0"
+                  src={imageUrl}
+                />
+
+                {/* Header on top */}
+                <CardHeader className="absolute z-10 top-2 left-2 flex-col items-start">
+                  <h6 className="text-gray-500 font-medium text-xs uppercase">
+                    {postType}
+                  </h6>
+                  <h6 className="text-black font-medium text-lg">{title}</h6>
+                </CardHeader>
+              </Card>
+            );
+          })
+        )}
       </div>
+      <PostModal
+        post={selectedPost}
+        open={!!selectedPost}
+        onClose={() => setSelectedPostId(null)}
+        onBack={() => {
+          if (selectedIndex > 0) {
+            setSelectedPostId(blogPosts[selectedIndex - 1].sys.id);
+          }
+        }}
+        onNext={() => {
+          if (selectedIndex < blogPosts.length - 1) {
+            setSelectedPostId(blogPosts[selectedIndex + 1].sys.id);
+          }
+        }}
+      />
     </DefaultLayout>
   );
 }
-
-/* Large Format Image */
-/* 
-<div className="mt-8 w-full">
-  <Link to="/intro">
-    <img 
-      src={blogPosts[0].fields.coverImage?.fields?.file?.url}
-      alt="Hero Image" 
-      className="w-full h-auto rounded-xl hover:scale-105 transition-transform duration-700 ease-in-out"
-    />
-  </Link>
-</div> 
-*/
-
-/* Card Section */
-/* 
-<div className="flex flex-wrap w-full h-auto rounded-xl my-8">
-  {blogPosts.map((post: any) => {
-    const imageUrl = post.fields.coverImage?.fields?.file?.url;
-    const title = post.fields.title;
-
-    return (
-      <Card
-        key={post.sys.id}
-        title={title}
-        imageUrl={imageUrl} // Pass the image URL
-        fixedImageUrl={post.fields.fixedImageUrl} // Provide a valid value for fixedImageUrl
-      />
-    );
-  })}
-</div> 
-*/
