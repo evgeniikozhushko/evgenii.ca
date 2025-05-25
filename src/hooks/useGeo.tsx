@@ -15,7 +15,9 @@ export function useGeo(ip: string | null) {
   useEffect(() => {
     if (!ip) return
 
+    console.log('Environment variables:', import.meta.env);
     const key = import.meta.env.VITE_IPSTACK_KEY;
+    console.log('IPStack key:', key);
     if (!key) throw new Error("Missing VITE_IPSTACK_KEY");
 
     fetch(`https://api.ipstack.com/${ip}?access_key=${key}&fields=ip,city,region_name,country_name`)
