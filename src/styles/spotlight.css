@@ -1,0 +1,19 @@
+/* spotlight.css */
+.spotlight {
+  position: relative;
+  overflow: hidden;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    rgba(255,255,255,0.2) 0%,
+    transparent 60%
+  );
+  background-position: var(--x, 50%) var(--y, 50%);
+  background-size: 200% 200%;
+  transition: background-position 0.15s ease-out;
+}
