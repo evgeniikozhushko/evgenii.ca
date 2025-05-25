@@ -13,10 +13,13 @@ export function useGeo(ip: string | null) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!ip) return
+    if (!ip) return;
 
     const key = import.meta.env.VITE_IPSTACK_KEY;
-    if (!key) throw new Error("Missing VITE_IPSTACK_KEY");
+    if (!key) {
+      console.error("Missing VITE_IPSTACK_KEY");
+      return;
+    }
 
     fetch(`https://api.ipstack.com/${ip}?access_key=${key}&fields=ip,city,region_name,country_name`)
 
