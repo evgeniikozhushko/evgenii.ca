@@ -89,8 +89,8 @@ export default function IndexPage() {
           mx-auto
           px-4      
           sm:px-8    
-          h-[200px]
-          sm:h-[300px]
+          h-[100px]
+          sm:h-[200px]
           md:h-[300px]
         "
       >
