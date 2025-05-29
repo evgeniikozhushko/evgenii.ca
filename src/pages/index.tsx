@@ -9,7 +9,6 @@ import ShinyText from "@/components/ShinyText";
 import "@/styles/ShinyText.css";
 import TextPressure from "@/components/TextPressure";
 import "@/styles/spotlight.css";
-import { useGeo } from "@/hooks/useGeo";
 
 export default function IndexPage() {
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
@@ -47,30 +46,6 @@ export default function IndexPage() {
     };
     load();
   }, []);
-
-  // Fetch the visitor's IP
-  const [ip, setIp] = useState<string | null>(null);
-  const [ipError, setIpError] = useState<string | null>(null);
-  
-  useEffect(() => {
-    fetch("https://api.ipify.org?format=json")
-      .then((r) => {
-        if (!r.ok) throw new Error(`IP fetch failed: ${r.status}`);
-        return r.json();
-      })
-      .then((j) => {
-        console.log('IP fetched:', j.ip);
-        setIp(j.ip);
-      })
-      .catch((err) => {
-        console.error('IP fetch error:', err);
-        setIpError(err.message);
-      });
-  }, []);
-
-  // Lookup geo for that IP
-  const { data: geo, error: geoError } = useGeo(ip);
-  console.log('Geo data:', geo, 'Geo error:', geoError);
 
   // Chunk rows by sizes 3,2,2
   const rows = (): any[][] => {
@@ -118,38 +93,10 @@ export default function IndexPage() {
           minFontSize={36}
         />
       </div>
-      <div className="flex flex-col items-start px-8 pb-24 pt-8 max-w-[900px] mx-auto">
-        {/* <h1 className="text-2xl font-light hover:skew-x-6 hover:scale-110 transition duration-700">
+      <div className="flex flex-col items-start px-8 pb-24 max-w-[900px] mx-auto">
+        <h1 className="text-md font-extralight hover:skew-x-6 hover:scale-110 transition duration-700 pl-2">
           Welcome to my website.
-        </h1> */}
-        {/* <p className="text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition duration-700">
-          I'm a designer and developer. Specializing in React based web
-          applications.
-        </p> */}
-
-        {/* ip Stack API - Geo greeting*/}
-        <div className="flex flex-col items-start pt-8 pb-10s max-w-[900px] ">
-          {ipError && <p className="text-red-600">IP Error: {ipError}</p>}
-          {geoError && <p className="text-red-600">Geo Error: {geoError}</p>}
-          {!ip && !ipError && (
-            <p className="text-sm text-gray-400">Getting your IP...</p>
-          )}
-          {ip && !geo && !geoError && (
-            <p className="text-sm text-gray-400">Detecting location...</p>
-          )}
-          {geo && (
-            <p className="text-lg font-light text-gray-500">
-              Welcome to my website, person from{" "}
-              {geo.city}, {geo.region_name}, {geo.country_name}.
-            </p>
-          )}
-        </div>
-
-        {/* <ShinyText
-          text="design & web development"
-          speed={3} // 3-second shine cycle
-          className="text-lg font-extralight mt-2 hover:skew-x-3 hover:scale-105 transition duration-700"
-        /> */}
+        </h1>
       </div>
 
       {/* Posts Grid with pattern 3-2-2 */}
