@@ -1,5 +1,6 @@
 // src/hooks/useGeo.ts
 import { useState, useEffect } from "react"
+import { config } from "@/config"
 
 export interface GeoData {
   ip: string;
@@ -15,20 +16,30 @@ export function useGeo(ip: string | null) {
   useEffect(() => {
     if (!ip) return;
 
-    const key = import.meta.env.VITE_IPSTACK_KEY;
+    const key = config.ipstackKey;
     if (!key) {
-      console.error("Missing VITE_IPSTACK_KEY");
+      console.error("Missing IPStack API key");
+      setError("API configuration error");
       return;
     }
 
+    console.log('Fetching geo data for IP:', ip);
     fetch(`https://api.ipstack.com/${ip}?access_key=${key}&fields=ip,city,region_name,country_name`)
-
       .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json()
+        if (!res.ok) {
+          console.error('IPStack API error:', res.status, res.statusText);
+          throw new Error(`IPStack API error: ${res.status} ${res.statusText}`);
+        }
+        return res.json();
       })
-      .then((json: GeoData) => setData(json))
-      .catch(err => setError(err.message))
+      .then((json: GeoData) => {
+        console.log('Geo data received:', json);
+        setData(json);
+      })
+      .catch(err => {
+        console.error('Geo lookup error:', err);
+        setError(err.message);
+      });
   }, [ip])
 
   return { data, error }

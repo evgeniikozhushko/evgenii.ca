@@ -48,18 +48,29 @@ export default function IndexPage() {
     load();
   }, []);
 
-  // Fetch the visitor’s IP
+  // Fetch the visitor's IP
   const [ip, setIp] = useState<string | null>(null);
+  const [ipError, setIpError] = useState<string | null>(null);
+  
   useEffect(() => {
     fetch("https://api.ipify.org?format=json")
-      .then((r) => r.json())
-      .then((j) => setIp(j.ip))
-      .catch(console.error);
+      .then((r) => {
+        if (!r.ok) throw new Error(`IP fetch failed: ${r.status}`);
+        return r.json();
+      })
+      .then((j) => {
+        console.log('IP fetched:', j.ip);
+        setIp(j.ip);
+      })
+      .catch((err) => {
+        console.error('IP fetch error:', err);
+        setIpError(err.message);
+      });
   }, []);
 
   // Lookup geo for that IP
   const { data: geo, error: geoError } = useGeo(ip);
-  console.log(geo);
+  console.log('Geo data:', geo, 'Geo error:', geoError);
 
   // Chunk rows by sizes 3,2,2
   const rows = (): any[][] => {
@@ -117,17 +128,22 @@ export default function IndexPage() {
         </p> */}
 
         {/* ip Stack API - Geo greeting*/}
-      <div className="flex flex-col items-start pt-8 pb-10s max-w-[900px] ">
-        {geoError && <p className="text-red-600">Geo error: {geoError}</p>}
-        {geo ? (
-          <p className="text-lg font-light text-gray-500">
-            Welcome to my website, person from{" "}
-            {geo.city}, {geo.region_name}, {geo.country_name}.
-          </p>
-        ) : (
-          <p className="text-sm text-gray-400">Detecting location…</p>
-        )}
-      </div>
+        <div className="flex flex-col items-start pt-8 pb-10s max-w-[900px] ">
+          {ipError && <p className="text-red-600">IP Error: {ipError}</p>}
+          {geoError && <p className="text-red-600">Geo Error: {geoError}</p>}
+          {!ip && !ipError && (
+            <p className="text-sm text-gray-400">Getting your IP...</p>
+          )}
+          {ip && !geo && !geoError && (
+            <p className="text-sm text-gray-400">Detecting location...</p>
+          )}
+          {geo && (
+            <p className="text-lg font-light text-gray-500">
+              Welcome to my website, person from{" "}
+              {geo.city}, {geo.region_name}, {geo.country_name}.
+            </p>
+          )}
+        </div>
 
         {/* <ShinyText
           text="design & web development"
