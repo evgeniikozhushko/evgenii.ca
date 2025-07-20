@@ -18,7 +18,7 @@ import clsx from "clsx";
 // import { fetchLogo } from "@/contentful/core";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
-import { useTheme } from "@/hooks/use-theme"; // Import useTheme hook
+import { useTheme } from "@/provider"; // Import useTheme hook
 import {
   GithubIcon,
   DiscordIcon,
