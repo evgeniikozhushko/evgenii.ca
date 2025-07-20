@@ -9,6 +9,7 @@ import ShinyText from "@/components/ShinyText";
 import "@/styles/ShinyText.css";
 import TextPressure from "@/components/TextPressure";
 import "@/styles/spotlight.css";
+import About from "./about";
 
 export default function IndexPage() {
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
@@ -93,10 +94,11 @@ export default function IndexPage() {
           minFontSize={36}
         />
       </div>
-      <div className="flex flex-col items-start px-8 pb-24 max-w-[900px] mx-auto">
-        <h1 className="text-md font-extralight hover:skew-x-6 hover:scale-110 transition duration-700 pl-2">
+      <div className="flex flex-col items-start px-8 pb-8 max-w-[900px] mx-auto">
+      <About />
+        {/* <h1 className="text-md font-extralight hover:skew-x-6 hover:scale-110 transition duration-700 pl-2">
           Welcome to my website.
-        </h1>
+        </h1> */}
       </div>
 
       {/* Posts Grid with pattern 3-2-2 */}
