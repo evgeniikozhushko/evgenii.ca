@@ -105,7 +105,13 @@ export const Navbar = () => {
         <NavbarBrand className="gap-3 max-w-fit">
           <Link href="/">
             {/* Dynamically choose the logo based on the current theme */}
-            <img src={theme === "dark" ? darkLogoSrc : lightLogoSrc} alt="Evgenii.ca Logo" width="30" height="30" />
+            <img 
+              key={theme} 
+              src={theme === "dark" ? darkLogoSrc : lightLogoSrc} 
+              alt="Evgenii.ca Logo" 
+              width="30" 
+              height="30" 
+            />
           </Link>
         </NavbarBrand>
         <div className="hidden md:flex gap-4 justify-start ml-2">
