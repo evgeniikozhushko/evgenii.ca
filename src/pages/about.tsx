@@ -6,7 +6,7 @@ export default function About() {
   return (
     <>
       <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10 w-full">
-        <Card isFooterBlurred className="border-none w-full" radius="lg">
+        {/* <Card isFooterBlurred className="border-none w-full" radius="lg">
           <Image
             alt="Woman listing to music"
             className="object-cover"
@@ -14,7 +14,7 @@ export default function About() {
             src="#"
             width={100}
           />
-          {/* <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+          <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
           <p className="text-tiny text-white/80">Available soon.</p>
           <Button
             className="text-tiny text-white bg-black/20"
@@ -25,8 +25,20 @@ export default function About() {
           >
             Notify me
           </Button>
-        </CardFooter> */}
-        </Card>
+        </CardFooter>
+        </Card> */}
+        <h4 className="text-base sm:text-lg md:text-xl font-extralight leading-relaxed text-foreground hover:skew-x-1 hover:scale-[1.02] transition-all duration-500 ease-in-out max-w-[900px] px-0 sm:px-4 mx-auto">
+          I’m Evgenii Kozhushko — a visual designer turned full-stack developer.
+          I bring a design-first mindset to every project, merging creative
+          direction with technical execution.
+          <br />
+          <br />
+          With a background in branding and
+          storytelling, I build digital experiences that are not only modern and
+          scalable but also intuitive and visually engaging. Using tools like
+          MongoDB, Express.js, React, Node.js, and Next.js, I develop concepts into
+          accessible, user-focused web applications.
+        </h4>
       </section>
     </>
   );
