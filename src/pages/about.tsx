@@ -28,7 +28,7 @@ export default function About() {
         </CardFooter>
         </Card> */}
         <h4 className="text-base sm:text-lg md:text-xl font-extralight leading-relaxed text-foreground hover:skew-x-1 hover:scale-[1.02] transition-all duration-500 ease-in-out max-w-[900px] px-0 sm:px-4 mx-auto pt-4 md:py-12">
-          I’m Evgenii Kozhushko — a visual designer turned full-stack developer.
+          I’m Evgenii—a visual designer turned full-stack developer.
           I bring a design-first mindset to every project, merging creative
           direction with technical execution.
           <br />
