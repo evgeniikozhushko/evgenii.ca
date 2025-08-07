@@ -5,7 +5,7 @@ import { Card, CardFooter, Image, Button } from "@nextui-org/react";
 export default function About() {
   return (
     <>
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10 w-full">
+      <section className="flex flex-col items-center justify-center gap-4 py-8 pt-12 sm:pt-8 md:pt-4 w-full">
         {/* <Card isFooterBlurred className="border-none w-full" radius="lg">
           <Image
             alt="Woman listing to music"
@@ -27,7 +27,7 @@ export default function About() {
           </Button>
         </CardFooter>
         </Card> */}
-        <h4 className="text-base sm:text-lg md:text-xl font-extralight leading-relaxed text-foreground hover:skew-x-1 hover:scale-[1.02] transition-all duration-500 ease-in-out max-w-[900px] px-0 sm:px-4 mx-auto">
+        <h4 className="text-base sm:text-lg md:text-xl font-extralight leading-relaxed text-foreground hover:skew-x-1 hover:scale-[1.02] transition-all duration-500 ease-in-out max-w-[900px] px-0 sm:px-4 mx-auto pt-4 md:py-12">
           I’m Evgenii Kozhushko — a visual designer turned full-stack developer.
           I bring a design-first mindset to every project, merging creative
           direction with technical execution.
