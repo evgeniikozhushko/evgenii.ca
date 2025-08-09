@@ -14,7 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<IndexPage />} />
         <Route path="/docs" element={<DocsPage />}  />
-        <Route path="/intro" element={<Intro />} />
+        {/* <Route path="/intro" element={<Intro />} /> */}
       </Routes>
     </NextUIProvider>
   );
